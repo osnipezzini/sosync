@@ -134,6 +134,7 @@ public class SyncRunner : ISyncRunner
                 }
                 await RunSyncAsync(item.Nickname);
             }
+            // TODO: Ajustar para salvar a ultima vez que rodou a sincronia!
             Thread.Sleep(10000);
         }
     }
