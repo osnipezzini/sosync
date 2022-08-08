@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOSyncCommon", "SOSyncCommon\SOSyncCommon.csproj", "{E9D31F85-6C2D-45F4-98A5-D2F5C4F1755D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOSyncAbstractions", "SOSyncAbstractions\SOSyncAbstractions.csproj", "{E9196829-3089-4B28-BEB6-D033F4318939}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{E9D31F85-6C2D-45F4-98A5-D2F5C4F1755D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9D31F85-6C2D-45F4-98A5-D2F5C4F1755D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9D31F85-6C2D-45F4-98A5-D2F5C4F1755D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9196829-3089-4B28-BEB6-D033F4318939}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9196829-3089-4B28-BEB6-D033F4318939}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9196829-3089-4B28-BEB6-D033F4318939}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9196829-3089-4B28-BEB6-D033F4318939}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{DA43ECD3-5EBC-4FAA-AFB5-EF1C4E74849A} = {CE9C61F5-D58F-45C9-80DE-36FD4BD32ACA}
 		{18E8A891-25C9-4C02-A459-3D0AD6DE9C56} = {CE9C61F5-D58F-45C9-80DE-36FD4BD32ACA}
 		{E9D31F85-6C2D-45F4-98A5-D2F5C4F1755D} = {6F157D08-39D0-4B44-8DB6-B4496DDAF0AF}
+		{E9196829-3089-4B28-BEB6-D033F4318939} = {6F157D08-39D0-4B44-8DB6-B4496DDAF0AF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D340781E-A8D7-4875-A10A-F43B620F63B8}
