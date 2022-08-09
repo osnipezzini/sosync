@@ -1,14 +1,53 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:SOSyncView.ViewModels"
-             x:Class="SOSyncView.Pages.SyncPage"
+             xmlns:vm="clr-namespace:SOSync.View.ViewModels"
+             xmlns:models="clr-namespace:SOSync.Abstractions.Models;assembly=SOSync.Abstractions"
+             xmlns:converters="clr-namespace:SOSync.View.Converters"             
+             x:Class="SOSync.View.Pages.SyncPage"
              x:DataType="vm:SyncViewModel"
-             Title="SyncPage">
+             Title="Status das sincronias">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:StatusToImageConverter x:Key="StatusToImage"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <VerticalStackLayout>
-        <Label 
-            Text="Status da sincronia"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+        <RefreshView IsRefreshing = "{Binding IsBusy}">
+            <CollectionView              
+              ItemsSource="{Binding Syncs}"
+                SelectionChangedCommand="{Binding ShowSyncDetailCommand}"
+                SelectionChangedCommandParameter="{Binding SelectedSync}"
+              SelectedItem="{Binding SelectedSync}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Sync">
+                        <ViewCell>
+                            <Grid Padding="5,5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Image HeightRequest="20" 
+                               WidthRequest = "20"
+                               Source="{Binding Status, Converter={StaticResource StatusToImage}}"
+                               Grid.Row="0"
+                               Grid.Column="0"
+                               Grid.RowSpan ="2"/>
+
+                                <Label Grid.Row="0" 
+                               Grid.Column="1"
+                               Text="{Binding Empresa}"
+                               FontSize="Large"
+                               TextColor="#FF5525"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
     </VerticalStackLayout>
 </ContentPage>

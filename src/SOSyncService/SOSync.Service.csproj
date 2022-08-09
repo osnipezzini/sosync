@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -12,6 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SOSyncCommon\SOSyncCommon.csproj" />
+    <ProjectReference Include="..\SOSyncCommon\SOSync.Common.csproj" />
   </ItemGroup>
 </Project>

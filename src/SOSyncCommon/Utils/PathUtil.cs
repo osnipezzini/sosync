@@ -4,7 +4,7 @@ using CliWrap.Buffered;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace SOSyncCommon.Utils;
+namespace SOSync.Common.Utils;
 
 public delegate void PathUtilLogEventHandler(object source, string logMessage);
 

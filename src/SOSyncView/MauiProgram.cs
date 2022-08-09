@@ -1,7 +1,5 @@
-﻿using SOFramework;
-
-using SOSyncView.Pages;
-using SOSyncView.ViewModels;
+﻿using SOSync.View.Pages;
+using SOSync.View.ViewModels;
 
 namespace SOSyncView;
 

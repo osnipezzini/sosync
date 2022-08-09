@@ -1,4 +1,4 @@
-﻿namespace SOSyncAbstractions.Models
+﻿namespace SOSync.Abstractions.Models
 {
     public class DatabaseConfig
     {

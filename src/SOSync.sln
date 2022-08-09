@@ -5,17 +5,17 @@ VisualStudioVersion = 17.3.32728.150
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Executable", "Executable", "{CE9C61F5-D58F-45C9-80DE-36FD4BD32ACA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOSyncView", "SOSyncView\SOSyncView.csproj", "{8F62927F-8B0C-423C-BA8A-3923D4D5288C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOSync.View", "SOSyncView\SOSync.View.csproj", "{8F62927F-8B0C-423C-BA8A-3923D4D5288C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOSyncService", "SOSyncService\SOSyncService.csproj", "{DA43ECD3-5EBC-4FAA-AFB5-EF1C4E74849A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOSync.Service", "SOSyncService\SOSync.Service.csproj", "{DA43ECD3-5EBC-4FAA-AFB5-EF1C4E74849A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOSyncAPI", "SOSyncAPI\SOSyncAPI.csproj", "{18E8A891-25C9-4C02-A459-3D0AD6DE9C56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOSync.API", "SOSyncAPI\SOSync.API.csproj", "{18E8A891-25C9-4C02-A459-3D0AD6DE9C56}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{6F157D08-39D0-4B44-8DB6-B4496DDAF0AF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOSyncCommon", "SOSyncCommon\SOSyncCommon.csproj", "{E9D31F85-6C2D-45F4-98A5-D2F5C4F1755D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOSync.Common", "SOSyncCommon\SOSync.Common.csproj", "{E9D31F85-6C2D-45F4-98A5-D2F5C4F1755D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOSyncAbstractions", "SOSyncAbstractions\SOSyncAbstractions.csproj", "{E9196829-3089-4B28-BEB6-D033F4318939}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOSync.Abstractions", "SOSyncAbstractions\SOSync.Abstractions.csproj", "{E9196829-3089-4B28-BEB6-D033F4318939}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

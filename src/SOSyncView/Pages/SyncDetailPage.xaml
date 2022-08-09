@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SOSync.View.Pages.SyncDetailPage"
+             Title="SyncDetailPage">
+    <VerticalStackLayout Padding="20,30">
+            <Label Text="{Binding Empresa}" FontSize="Large" TextColor="#FF5525" />
+
+            <Label Text="{Binding Atraso}" FontSize="Medium" TextColor="DeepSkyBlue" />
+
+            <Label Text="{Binding LastUpdate}" FontSize="Small"  />
+    </VerticalStackLayout>
+</ContentPage>

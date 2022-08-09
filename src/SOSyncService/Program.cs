@@ -1,4 +1,4 @@
-using SOSyncService;
+using SOSync.Service;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>

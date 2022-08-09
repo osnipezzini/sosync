@@ -1,4 +1,4 @@
-﻿namespace SOSyncAbstractions.DTO
+﻿namespace SOSync.Abstractions.DTO
 {
     public class ContaSaldoInvalida
     {

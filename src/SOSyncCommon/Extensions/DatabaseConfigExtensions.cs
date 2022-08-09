@@ -1,11 +1,9 @@
-﻿using SOSyncAbstractions.DTO;
-
-using System.Data;
+﻿using System.Data;
 using System.Diagnostics;
 using System.Net.Sockets;
 using System.Text;
 
-namespace SOSyncCommon;
+namespace SOSync.Common;
 
 public static class DatabaseConfigExtensions
 {

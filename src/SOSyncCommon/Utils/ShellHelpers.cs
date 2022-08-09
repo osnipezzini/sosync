@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace SOSyncCommon.Utils;
+namespace SOSync.Common.Utils;
 
 public static class ShellHelpers
 {

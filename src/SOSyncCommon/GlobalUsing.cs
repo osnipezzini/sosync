@@ -5,6 +5,7 @@ global using Microsoft.Extensions.Options;
 
 global using Npgsql;
 
-global using SOSyncAbstractions.Models;
+global using SOSync.Abstractions.DTO;
+global using SOSync.Abstractions.Models;
 
-global using SOSyncCommon.Utils;
+global using SOSync.Common.Utils;

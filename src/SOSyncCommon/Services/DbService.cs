@@ -1,4 +1,4 @@
-﻿namespace SOSyncCommon.Services;
+﻿namespace SOSync.Common.Services;
 
 public interface IDbService
 {

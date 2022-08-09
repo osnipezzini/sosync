@@ -1,4 +1,4 @@
-namespace SOSyncService;
+namespace SOSync.Service;
 
 public class Worker : BackgroundService
 {
