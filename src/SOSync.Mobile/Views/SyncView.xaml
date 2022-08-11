@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:SOSync.Abstractions.Models;assembly=SOSync.Abstractions"
+             x:DataType="models:Sync"
+            x:Class="SOSync.Mobile.Views.SyncView">
+    <Frame CornerRadius="15" BackgroundColor="Transparent" Padding="0" Margin="5">
+        <Grid BackgroundColor="#0a5e67">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Image HeightRequest="{OnIdiom Desktop=70, Default=35}" 
+                               WidthRequest = "{OnIdiom Desktop=70, Default=35}"
+                               Source="{Binding Status}"
+                               Grid.Row="0"
+                               Margin="10, 0, 20, 0"
+                               Grid.Column="0"
+                               Grid.RowSpan ="2"/>
+            <Label Grid.Row="0" 
+                               Grid.Column="1"
+                               Text="{Binding Conexao}"
+                               FontSize="Large"/>
+            <Label Grid.Row="1"
+                                   Grid.Column="1"
+                               Text="{Binding Empresa}"
+                               FontSize="Large"/>
+        </Grid>
+    </Frame>
+</ContentView>
