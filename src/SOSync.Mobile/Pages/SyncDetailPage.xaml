@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SOSync.Mobile.ViewModels"
+             x:Class="SOSync.Mobile.Pages.SyncDetailPage"
+             x:DataType="vm:SyncDetailViewModel"
+             Title="SyncDetailPage">
+    <VerticalStackLayout Padding="20,30">
+        <Label FontSize="Large" TextColor="#FF5525">
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="Empresa: "/>
+                    <Span Text="{Binding Sync.Empresa}" FontAttributes="Bold"/>
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+        <Label FontSize="Large" TextColor="DeepSkyBlue">
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="Atraso: "/>
+                    <Span Text="{Binding Sync.Atraso}" FontAttributes="Bold"/>
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+        <Label FontSize="Large">
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="Ultima sincronia realizada: "/>
+                    <Span Text="{Binding Sync.LastUpdate}" FontAttributes="Bold"/>
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+    </VerticalStackLayout>
+</ContentPage>

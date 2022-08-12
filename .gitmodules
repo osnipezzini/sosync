@@ -1,0 +1,3 @@
+[submodule "src/SOFrameworks"]
+	path = src/SOFrameworks
+	url = git@git.sotech.xyz:internal/SOFrameworks.git
