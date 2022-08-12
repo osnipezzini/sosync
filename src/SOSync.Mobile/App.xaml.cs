@@ -1,4 +1,4 @@
-﻿using SOFramework.Shared.Services;
+﻿using SOFramework.Services;
 
 namespace SOSync.Mobile;
 
