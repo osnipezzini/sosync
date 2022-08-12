@@ -2,17 +2,10 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:SOSync.Mobile.ViewModels"
-             xmlns:models="clr-namespace:SOSync.Abstractions.Models;assembly=SOSync.Abstractions"
-             xmlns:converters="clr-namespace:SOSync.Mobile.Converters"         
              xmlns:views="clr-namespace:SOSync.Mobile.Views"
              x:Class="SOSync.Mobile.Pages.SyncPage"
              x:DataType="vm:SyncViewModel"
              Title="Status das sincronias">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <converters:StatusToImageConverter x:Key="StatusToImage"/>
-        </ResourceDictionary>
-    </ContentPage.Resources>
     <ContentPage.Content>
         <ListView HasUnevenRows="true"
               IsRefreshing = "{Binding IsBusy}"
