@@ -8,6 +8,7 @@ public class AppConstants
     public const string WinUIModuleId = "19727e28-af03-417a-8744-f946288ed51b";
     public const string IOSModuleId = "b5f921b3-b64e-467e-932d-4235f1cc3677";
     public const string MacModuleId = "4b6467b9-67aa-4afd-91bd-e84e58959380";
+    public const string ServiceID = "219a2c00-761e-41df-a76a-a9ff7341c54a";
 
     public const string AppInsightsKey = "InstrumentationKey=635cbeac-3974-455c-a644-f9e01df903df;" +
         "IngestionEndpoint=https://brazilsouth-1.in.applicationinsights.azure.com/;" +
