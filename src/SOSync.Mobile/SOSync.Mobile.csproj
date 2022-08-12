@@ -48,15 +48,14 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
+	<!-- Nuget Packages -->
 	<ItemGroup>
+	  <PackageReference Include="SOFramework.Maui" Version="1.0.1" />
 	  <PackageReference Include="SOLogging.MAUI" Version="0.0.2" />
 	</ItemGroup>
 
-	<!-- Nuget Packages -->
-
 	<!-- Local projects -->
 	<ItemGroup>
-	  <ProjectReference Include="..\SOFrameworks\src\SOFramework.Maui\SOFramework.Maui.csproj" />
 	  <ProjectReference Include="..\SOSync.Common\SOSync.Common.csproj" />
 	</ItemGroup>
 	<ItemGroup>
