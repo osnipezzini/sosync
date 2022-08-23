@@ -8,8 +8,8 @@
         <converters:StatusToImageConverter x:Key="StatusToImage" />
     </ContentView.Resources>
     <ContentView.Content>
-        <Frame CornerRadius="15" BackgroundColor="Transparent" Padding="0" Margin="5">
-            <Grid BackgroundColor="#0a5e67" x:DataType="models:Sync">
+        <Frame CornerRadius="15" BackgroundColor="Transparent" BorderColor="#0a5e67" Padding="5,2,5,2" Margin="6">
+            <Grid BackgroundColor="Transparent" x:DataType="models:Sync">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
@@ -28,6 +28,7 @@
                 <Label Grid.Row="0" 
                                Grid.Column="1"
                                Text="{Binding Conexao}"
+                               FontAttributes="Bold"
                                FontSize="Large"/>
                 <Label Grid.Row="1"
                                    Grid.Column="1"
