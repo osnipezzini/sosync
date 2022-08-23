@@ -1,4 +1,5 @@
 ﻿using SOLogging;
+using CommunityToolkit.Maui;
 
 namespace SOSync.Mobile;
 
@@ -13,10 +14,11 @@ public static class MauiProgram
 #endif
 
         var builder = MauiApp.CreateBuilder();
-		builder
-			.UseMauiApp<App>()
-			.UseSOFramework()
-			.ConfigureSOLicense()
+        builder
+            .UseMauiApp<App>()
+            .UseSOFramework()
+            .ConfigureSOLicense()
+            .UseMauiCommunityToolkit()
             .ConfigureSOLogging(x =>
             {
                 x.AppCenterKey = AppConstants.AppCenterKey;

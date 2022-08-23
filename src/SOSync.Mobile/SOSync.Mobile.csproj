@@ -49,6 +49,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="CommunityToolkit.Maui" Version="1.2.0" />
+	  <PackageReference Include="SOFramework.Maui" Version="1.1.1" />
 	  <PackageReference Include="SOLogging.MAUI" Version="0.0.2" />
 	</ItemGroup>
 
@@ -56,7 +58,6 @@
 
 	<!-- Local projects -->
 	<ItemGroup>
-	  <ProjectReference Include="..\SOFrameworks\src\SOFramework.Maui\SOFramework.Maui.csproj" />
 	  <ProjectReference Include="..\SOSync.Common\SOSync.Common.csproj" />
 	</ItemGroup>
 	<ItemGroup>
