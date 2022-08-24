@@ -8,7 +8,7 @@ namespace SOSync.Common.Services;
 
 public interface ISyncAPIService
 {
-    Task GetStatusSync();
+    Task<List<Sync>?> GetStatusSync();
 }
 public class SyncAPIService : ISyncAPIService
 {
@@ -23,7 +23,7 @@ public class SyncAPIService : ISyncAPIService
         logger = serviceProvider.GetService<ILogger<SyncAPIService>>();
     }
 
-    public async Task GetStatusSync()
+    public async Task<List<Sync>?> GetStatusSync()
     {
         string message = "";
         string path = "/api/status";
@@ -36,11 +36,11 @@ public class SyncAPIService : ISyncAPIService
             logger.LogDebug($"Enviando requisição para pegar os status da sincronia.");
             logger.LogDebug($"Path: {path}");
             logger.LogDebug("------------------------------------------------------------------");
-            HttpResponseMessage response = await httpClient.GetAsync(path);
+            var response = await httpClient.GetAsync<List<Sync>?>(path);
             switch (response.StatusCode)
             {
                 case HttpStatusCode.OK:
-                    break;
+                    return response.Value;
                 case HttpStatusCode.NotFound:
                     message = $"Rota não encontrada: {path}";
                     logger.LogError(message);
@@ -55,6 +55,7 @@ public class SyncAPIService : ISyncAPIService
         {
             Crashes.TrackError(hre);
             logger.LogError($"Não conseguimos contatar a API em tempo hábil.");
+            throw new Exception(hre.Message, hre);
         }
         catch (Exception e)
         {
