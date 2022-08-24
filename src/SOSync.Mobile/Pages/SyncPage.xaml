@@ -3,9 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:SOSync.Mobile.ViewModels"
              xmlns:views="clr-namespace:SOSync.Mobile.Views"
+             xmlns:fonts="clr-namespace:SOFramework.Fonts;assembly=SOFramework.Maui"
              x:Class="SOSync.Mobile.Pages.SyncPage"
              x:DataType="vm:SyncViewModel"
              Title="Status das sincronias">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding RefreshStatusCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="Typicon"
+                                 Glyph="{x:Static fonts:Typicon.Refresh}"
+                                 Color="Azure"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <ListView HasUnevenRows="true"
               IsRefreshing = "{Binding IsBusy}"

@@ -4,31 +4,35 @@
              xmlns:vm="clr-namespace:SOSync.Mobile.ViewModels"
              x:Class="SOSync.Mobile.Pages.SyncDetailPage"
              x:DataType="vm:SyncDetailViewModel"
-             Title="SyncDetailPage">
-    <VerticalStackLayout Padding="20,30">
-        <Label FontSize="Large" TextColor="#FF5525">
-            <Label.FormattedText>
-                <FormattedString>
-                    <Span Text="Empresa: "/>
-                    <Span Text="{Binding Sync.Empresa}" FontAttributes="Bold"/>
-                </FormattedString>
-            </Label.FormattedText>
-        </Label>
-        <Label FontSize="Large" TextColor="DeepSkyBlue">
-            <Label.FormattedText>
-                <FormattedString>
-                    <Span Text="Atraso: "/>
-                    <Span Text="{Binding Sync.Atraso}" FontAttributes="Bold"/>
-                </FormattedString>
-            </Label.FormattedText>
-        </Label>
-        <Label FontSize="Large">
-            <Label.FormattedText>
-                <FormattedString>
-                    <Span Text="Ultima sincronia realizada: "/>
-                    <Span Text="{Binding Sync.LastUpdate}" FontAttributes="Bold"/>
-                </FormattedString>
-            </Label.FormattedText>
-        </Label>
-    </VerticalStackLayout>
+             Title="{Binding Title}">
+    <StackLayout Margin="2">
+        <Frame CornerRadius="15" BackgroundColor="Transparent" BorderColor="#0a5e67" Padding="5,2,5,2" Margin="6">
+            <VerticalStackLayout Padding="20,30">
+                <Label FontSize="Large">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Empresa: "/>
+                            <Span Text="{Binding Sync.Empresa}" TextColor="#FF5525" FontAttributes="Bold"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label FontSize="Large">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Atraso: "/>
+                            <Span Text="{Binding Sync.Atraso}" TextColor="{Binding Color}" FontAttributes="Bold"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label FontSize="Large">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Ultima sincronia realizada: "/>
+                            <Span Text="{Binding Sync.LastUpdate}" TextColor="Black" FontAttributes="Bold"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </VerticalStackLayout>
+        </Frame>
+    </StackLayout>
 </ContentPage>
