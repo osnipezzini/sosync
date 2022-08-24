@@ -15,8 +15,4 @@
     <ProjectReference Include="..\SOSync.Common\SOSync.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>

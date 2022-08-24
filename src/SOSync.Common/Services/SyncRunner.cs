@@ -119,7 +119,6 @@ public class SyncRunner : ISyncRunner
             {
                 _logger.LogInformation($"Iniciando sincronia da configuracao {item.Nickname}.");
                 _startTime = DateTime.Now;
-
                 await item.KillSyncAsync();
                 var lastUpdate = DateTime.Now - item.LastMaintenance;
                 var minTime = TimeSpan.FromHours(16);
