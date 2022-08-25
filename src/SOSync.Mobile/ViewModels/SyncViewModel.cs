@@ -1,18 +1,31 @@
-﻿using SOSync.Common.Utils;
+﻿using SOSync.Common.Services;
+using SOSync.Common.Utils;
 
 namespace SOSync.Mobile.ViewModels;
 
 public partial class SyncViewModel : SOViewModel
 {
-    public ObservableCollection<Sync> Syncs { get; }
     [ObservableProperty]
     private Sync selectedSync;
+    private bool isVisible;
+    private readonly ISyncAPIService aPIService;
 
+
+    public bool IsVisible
+    {
+        get => isVisible; set
+        {
+            if (Syncs.Count > 0)
+                isVisible = false;
+            else isVisible = true;
+        } }
+    public ObservableCollection<Sync> Syncs { get; }
     public Command RefreshStatusCommand { get; }
-    public SyncViewModel()
+    public SyncViewModel(ISyncAPIService syncAPIService)
 	{
 		Syncs = new ObservableCollection<Sync>();
         RefreshStatusCommand = new Command(async () => await ExecuteRefreshStatusCommand());
+        aPIService = syncAPIService;
 	}
 
     private async Task ExecuteRefreshStatusCommand()
@@ -37,15 +50,18 @@ public partial class SyncViewModel : SOViewModel
         });
 
     [RelayCommand]
-    private void RefreshSyncList()
+    private async Task RefreshSyncList()
     {
         IsBusy = true;
 
-        var bombas = new List<Sync>();
+        var bombas = await aPIService.GetStatusSync();
 
-        Syncs.Clear();
-        foreach (var bomba in bombas)
-            Syncs.Add(bomba);
+        if (bombas is not null)
+        {
+            Syncs.Clear();
+            foreach (var bomba in bombas)
+                Syncs.Add(bomba);
+        }
 
         IsBusy = false;
     }

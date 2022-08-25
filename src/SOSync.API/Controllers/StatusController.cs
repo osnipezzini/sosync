@@ -15,7 +15,7 @@ namespace SOSync.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("status")]
+        [HttpGet("list")]
         public async Task<IActionResult> GetStatusList()
         {
             var bombas = new Sync[]

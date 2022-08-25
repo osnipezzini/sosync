@@ -1,12 +1,14 @@
-﻿using SOLogging;
-using CommunityToolkit.Maui;
+﻿using CommunityToolkit.Maui;
+using SOLogging;
+using SOSync.Common.Services;
 
 namespace SOSync.Mobile;
 
 public static class MauiProgram
 {
-	public static MauiApp CreateMauiApp()
-	{
+    private static readonly IServiceCollection _services = new ServiceCollection();
+    public static MauiApp CreateMauiApp()
+    {
 #if DEBUG
         Environment.SetEnvironmentVariable("SOLOGLEVEL", "10");
         Environment.SetEnvironmentVariable("SOTECHDEV", "1");
@@ -25,8 +27,21 @@ public static class MauiProgram
                 x.ApplicationInsightsKey = AppConstants.AppInsightsKey;
             });
 
-		builder.RegisterViews(typeof(MauiProgram));
+        builder.RegisterViews(typeof(MauiProgram));
 
-		return builder.Build();
-	}
+        builder.Services.Init();
+
+        return builder.Build();
+    }
+
+    public static void Init(this IServiceCollection _services)
+    {
+        _services.AddScoped<ISyncAPIService, SyncAPIService>();
+    }
+
+    public static T GetService<T>()
+    {
+        return _services.BuildServiceProvider().GetService<T>();
+    }
+
 }

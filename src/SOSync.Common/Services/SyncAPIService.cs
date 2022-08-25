@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Text;
-using System.Text.Json;
 
 namespace SOSync.Common.Services;
 
@@ -19,14 +18,14 @@ public class SyncAPIService : ISyncAPIService
     {
         httpClient = serviceProvider.GetService<HttpClient>();
         if (httpClient is not null)
-            httpClient.BaseAddress = new Uri("");
+            httpClient.BaseAddress = new Uri("https://c5ba-2804-30c-166d-fa00-5d5b-4e70-5847-57b8.sa.ngrok.io");
         logger = serviceProvider.GetService<ILogger<SyncAPIService>>();
     }
 
     public async Task<List<Sync>?> GetStatusSync()
     {
         string message = "";
-        string path = "/api/status";
+        string path = "/api/Status/list";
         if (httpClient is null || logger is null)
             throw new Exception("HttpClient ou Logger não definido!");
         try

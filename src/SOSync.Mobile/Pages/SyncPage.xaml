@@ -17,18 +17,23 @@
         </ToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <ListView HasUnevenRows="true"
+        <StackLayout>
+            <Label Text="Não foi possivel encontrar dados! Tente novamente mais tarde." 
+                   FontSize="Large"
+                   IsVisible="{Binding IsVisible}"/>
+            <ListView HasUnevenRows="true"
               IsRefreshing = "{Binding IsBusy}"
               HorizontalOptions="StartAndExpand"
               ItemSelected="Handle_ItemSelected"
               ItemsSource="{Binding Syncs}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <views:SyncView />
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <views:SyncView />
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>
