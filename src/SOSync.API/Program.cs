@@ -1,5 +1,6 @@
 using MudBlazor.Services;
-using SOSync.API.Data;
+using SOCore;
+using SOFramework;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,9 +12,9 @@ builder.Services.AddServerSideBlazor();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddSOCore();
+builder.Services.AddSOFramework();
 builder.Services.AddMudServices();
-builder.Services.AddSingleton<WeatherForecastService>();
 
 var app = builder.Build();
 
