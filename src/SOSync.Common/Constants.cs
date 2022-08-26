@@ -3,6 +3,7 @@
 public class AppConstants
 {
     public const string AppName = "SOSync";
+    public const string Secret = "5DCBD60C99244E5F85EF263F6243B349";
     public const string Identifier = "24057664-5DA8-41BD-8DCC-98D04AA1A430";
     public const string DroidModuleId = "02982a16-546a-4cfe-8088-c7a20b8fe504";
     public const string WinUIModuleId = "19727e28-af03-417a-8744-f946288ed51b";

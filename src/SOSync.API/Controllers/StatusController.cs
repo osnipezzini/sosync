@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SOSync.Abstractions.Models;
+using SOSync.API.Interfaces;
 using SOSync.Common.Utils;
 
 namespace SOSync.API.Controllers
@@ -9,12 +9,6 @@ namespace SOSync.API.Controllers
     [ApiController]
     public class StatusController : ControllerBase
     {
-        public StatusController()
-        {
-
-        }
-
-        [AllowAnonymous]
         [HttpGet("list")]
         public async Task<IActionResult> GetStatusList()
         {
