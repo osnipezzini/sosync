@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SOSync.Abstractions.Models;
-using SOSync.API.Interfaces;
 using SOSync.Common.Utils;
 
 namespace SOSync.API.Controllers
