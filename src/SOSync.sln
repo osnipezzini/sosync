@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOSync.Abstractions", "SOSy
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOSync.Mobile", "SOSync.Mobile\SOSync.Mobile.csproj", "{4E454A13-00C0-4181-97A1-6BC7E10F18A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOSync.Domain", "SOSync.Domain\SOSync.Domain.csproj", "{B2C43DFE-322C-40B7-AD3F-97073E10A081}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOSync.Domain", "SOSync.Domain\SOSync.Domain.csproj", "{B2C43DFE-322C-40B7-AD3F-97073E10A081}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

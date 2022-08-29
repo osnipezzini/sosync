@@ -1,0 +1,34 @@
+﻿@page "/general"
+@inject ISnackbar SnackBar
+@using SOSync.Common
+
+<PageTitle>Configurações gerais</PageTitle>
+
+<MudCard>
+    <MudCardContent>
+        <EditForm class="row g-3" Model="AppSettings.SOSyncConfig">
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudTextField required @bind-Value="@AppSettings.SOSyncConfig.SyncMaxTime" Label="Tempo máximo de espera!" />
+                </MudItem>
+                <MudItem xs="6">
+                    <MudCheckBox @bind-Checked="@AppSettings.SOSyncConfig.ReplaceSyncFiles" Label="Subistituir arquivos do ftp" />
+                </MudItem>
+            </MudGrid>
+        </EditForm>
+    </MudCardContent>
+    <MudCardActions>
+        <MudButton @onclick="Save" StartIcon="@Icons.Material.Filled.Save"
+                   Color="Color.Primary"
+                   FullWidth="true"
+                   Variant="Variant.Filled">Salvar</MudButton>
+    </MudCardActions>
+</MudCard>
+
+@code {
+    private void Save()
+    {
+        AppSettings.Save();
+        SnackBar.Add("Configurações salvas com sucesso", Severity.Success);
+    }
+}

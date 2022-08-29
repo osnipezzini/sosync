@@ -1,9 +1,11 @@
-﻿namespace SOSync.Abstractions.Models
+﻿using System.Collections.ObjectModel;
+
+namespace SOSync.Abstractions.Models
 {
     public class SOSyncConfig
     {
         public bool ReplaceSyncFiles { get; set; } = true;
-        public IEnumerable<DatabaseConfig> Databases { get; set; } = Array.Empty<DatabaseConfig>();
+        public ObservableCollection<DatabaseConfig> Databases { get; set; } = new ObservableCollection<DatabaseConfig>();
         public int SyncMaxTime { get; set; }
     }
 }

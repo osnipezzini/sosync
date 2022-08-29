@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SOCore.Utils;
+using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using static System.Environment;
 
@@ -7,7 +8,7 @@ namespace SOSync.Common;
 public class AppSettings
 {
     private static SOSyncConfig? sosyncConfig;
-    private static SOSyncConfig SOSyncConfig => sosyncConfig ??= new SOSyncConfig();
+    public static SOSyncConfig SOSyncConfig => sosyncConfig ??= new SOSyncConfig();
 
     static AppSettings()
     {
@@ -15,7 +16,7 @@ public class AppSettings
             LoadSOSyncConfig();
     }
 
-    public static IEnumerable<DatabaseConfig> DatabaseConfig => SOSyncConfig.Databases;
+    public static ObservableCollection<DatabaseConfig> DatabaseConfig => SOSyncConfig.Databases;
 
     public static string ConfigPath
     {

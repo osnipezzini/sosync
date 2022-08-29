@@ -1,9 +1,91 @@
 ﻿@page "/"
+@using SOCore.Models
+@using SOSync.Abstractions.Models
+@using SOSync.Common
+@using System.Collections.ObjectModel
+@inject NavigationManager navigationManager
+@inject ISnackbar SnackBar
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Banco de dados</PageTitle>
 
-<h1>Hello, world!</h1>
+<MudCard>
+    <MudCardContent>
+        <EditForm Model="database" class="row g-3">
+            <DataAnnotationsValidator />
+            <MudGrid>
+                <MudItem xs="6">
+                    <MudTextField @bind-Value="database.Host" Label="IP / DNS do servidor" />
+                </MudItem>
+                <MudItem xs="6">
+                    <MudTextField @bind-Value="database.Port" Label="Porta" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="database.Name" Label="Nome do banco de dados do AutoSystem" />
+                </MudItem>
+                <MudItem xs="6">
+                    <MudTextField @bind-Value="database.User" Label="Usuário master" />
+                </MudItem>
+                <MudItem xs="6">
+                    <MudTextField InputType="InputType.Password" @bind-Value="database.Password" Label="Senha do banco de dados" />
+                </MudItem>
+            </MudGrid>
+        </EditForm>
+    </MudCardContent>
+    <MudCardActions>
+        <MudButton @onclick="SaveConfig" StartIcon="@Icons.Material.Filled.Save" Color="Color.Primary"
+                   Variant="Variant.Filled" FullWidth="true">Salvar</MudButton>
+    </MudCardActions>
+</MudCard>
 
-Welcome to your new app.
+<MudContainer Style="margin-left: 20px; margin-top: 20px;">
+    <MudTable Items="@databaseConfigs" FixedHeader="true" Dense="true" Hover="true" @bind-SelectedItem="database">
+        <HeaderContent>
+            <MudTh>Bando de dados</MudTh>
+            <MudTh>IP/DNS</MudTh>
+            <MudTh>Porta</MudTh>
+            <MudTh>Ações</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Banco de dados">@context.Name</MudTd>
+            <MudTd DataLabel="IP/DNS">@context.Host</MudTd>
+            <MudTd DataLabel="Porta">@context.Port</MudTd>
+            <MudTd DataLabel="Ações">
+                <MudButton @onclick="x => RemoveConfig(context)" StartIcon="@Icons.Material.Filled.Remove" Color="Color.Primary"
+                           Variant="Variant.Filled">Remover</MudButton>
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+</MudContainer>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@code {
+    private DatabaseConfig database = new DatabaseConfig();
+    private ObservableCollection<DatabaseConfig> databaseConfigs = AppSettings.DatabaseConfig;
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+
+    private void SaveConfig()
+    {
+        foreach (var databaseConf in AppSettings.DatabaseConfig)
+        {
+            if (databaseConf.Name.ToLower() == database.Name.ToLower())
+            {
+                AppSettings.DatabaseConfig.Remove(databaseConf);
+                break;
+            }
+        }
+        AppSettings.DatabaseConfig.Add(database);
+        AppSettings.Save();
+        database = new DatabaseConfig();
+        SnackBar.Add("Configurações salvas com sucesso", Severity.Success);
+    }
+
+    private void RemoveConfig(DatabaseConfig? config)
+    {
+        if (config is not null)
+            AppSettings.DatabaseConfig.Remove(config);
+
+        AppSettings.Save();
+    }
+}
