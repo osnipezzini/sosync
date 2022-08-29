@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SOSync.Common\SOSync.Common.csproj" />
+    <ProjectReference Include="..\SOSync.Domain\SOSync.Domain.csproj" />
   </ItemGroup>
 
 </Project>

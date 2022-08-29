@@ -1,6 +1,7 @@
 using MudBlazor.Services;
 using SOCore;
 using SOFramework;
+using SOSync.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSOCore();
 builder.Services.AddSOFramework();
 builder.Services.AddMudServices();
+builder.Services.ConfigureDomainServices();
 
 var app = builder.Build();
 
