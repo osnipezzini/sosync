@@ -7,5 +7,7 @@ namespace SOSync.Abstractions.Models
         public bool ReplaceSyncFiles { get; set; } = true;
         public ObservableCollection<DatabaseConfig> Databases { get; set; } = new ObservableCollection<DatabaseConfig>();
         public int SyncMaxTime { get; set; }
+        public bool ActivateSyncs { get; set; } = true;
+        public int SyncDelay { get; set; } = 15;
     }
 }
