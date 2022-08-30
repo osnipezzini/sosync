@@ -16,19 +16,27 @@ public class APIService : IAPIService
 
 	public async Task<List<Sync>> GetSyncs()
 	{
-		var syncs = new List<Sync>();
-		foreach (var item in AppSettings.DatabaseConfig)
+		try
 		{
-			var newSync = await item.ListSyncStatus();
-			
-			if (newSync != null)
-			{
-				foreach (var sync in newSync)
-				{
-					syncs.Add(sync);
-				}
-			}
+            var syncs = new List<Sync>();
+            foreach (var item in AppSettings.DatabaseConfig)
+            {
+                var newSync = await item.ListSyncStatus();
+
+                if (newSync != null)
+                {
+                    foreach (var sync in newSync)
+                    {
+                        syncs.Add(sync);
+                    }
+                }
+            }
+            return syncs;
         }
-		return syncs;
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+		
 	}
 }

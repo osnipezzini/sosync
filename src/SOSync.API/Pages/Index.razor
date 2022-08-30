@@ -67,25 +67,42 @@
 
     private void SaveConfig()
     {
-        foreach (var databaseConf in AppSettings.DatabaseConfig)
+        try
         {
-            if (databaseConf.Name.ToLower() == database.Name.ToLower())
+            foreach (var databaseConf in AppSettings.DatabaseConfig)
             {
-                AppSettings.DatabaseConfig.Remove(databaseConf);
-                break;
+                if (databaseConf.Name.ToLower() == database.Name.ToLower())
+                {
+                    AppSettings.DatabaseConfig.Remove(databaseConf);
+                    break;
+                }
             }
+            AppSettings.DatabaseConfig.Add(database);
+            AppSettings.Save();
+            database = new DatabaseConfig();
+            SnackBar.Add("Configurações salvas com sucesso", Severity.Success);
+        } 
+        catch (Exception ex)
+        {
+            SnackBar.Add(ex.Message, Severity.Error);
         }
-        AppSettings.DatabaseConfig.Add(database);
-        AppSettings.Save();
-        database = new DatabaseConfig();
-        SnackBar.Add("Configurações salvas com sucesso", Severity.Success);
+
     }
 
     private void RemoveConfig(DatabaseConfig? config)
     {
-        if (config is not null)
-            AppSettings.DatabaseConfig.Remove(config);
+        try
+        {
+            if (config is not null)
+                AppSettings.DatabaseConfig.Remove(config);
 
-        AppSettings.Save();
+            AppSettings.Save();
+            SnackBar.Add("Configurações removidas com sucesso", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            SnackBar.Add(ex.Message, Severity.Error);
+        }
+
     }
 }

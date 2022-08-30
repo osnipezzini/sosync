@@ -28,7 +28,15 @@
 @code {
     private void Save()
     {
-        AppSettings.Save();
-        SnackBar.Add("Configurações salvas com sucesso", Severity.Success);
+        try
+        {
+            AppSettings.Save();
+            SnackBar.Add("Configurações salvas com sucesso", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            SnackBar.Add(ex.Message, Severity.Error);
+        }
+
     }
 }
