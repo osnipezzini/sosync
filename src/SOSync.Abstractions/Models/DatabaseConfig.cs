@@ -13,7 +13,7 @@ namespace SOSync.Abstractions.Models
         public string Password { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public DateTime? LastMaintenance { get => _lastMaintenance ??= DateTime.Now.Subtract(TimeSpan.FromHours(48)); set => _lastMaintenance = value; }
-        public bool ActiveSync { get; set; }
+        public bool ActiveSync { get; set; } = true;
 
         public override string ToString()
         {

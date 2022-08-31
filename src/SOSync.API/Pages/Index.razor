@@ -19,14 +19,20 @@
                 <MudItem xs="6">
                     <MudTextField @bind-Value="database.Port" Label="Porta" />
                 </MudItem>
-                <MudItem xs="12">
+                <MudItem xs="6">
                     <MudTextField @bind-Value="database.Name" Label="Nome do banco de dados do AutoSystem" />
+                </MudItem>
+                <MudItem xs="6">
+                    <MudTextField @bind-Value="database.Nickname" Label="Nome da conexão"/>
                 </MudItem>
                 <MudItem xs="6">
                     <MudTextField @bind-Value="database.User" Label="Usuário master" />
                 </MudItem>
                 <MudItem xs="6">
                     <MudTextField InputType="InputType.Password" @bind-Value="database.Password" Label="Senha do banco de dados" />
+                </MudItem>
+                <MudItem>
+                    <MudCheckBox @bind-Checked="database.ActiveSync" Label="Sincronia ativa" />
                 </MudItem>
             </MudGrid>
         </EditForm>
@@ -40,12 +46,14 @@
 <MudContainer Style="margin-left: 20px; margin-top: 20px;">
     <MudTable Items="@databaseConfigs" FixedHeader="true" Dense="true" Hover="true" @bind-SelectedItem="database">
         <HeaderContent>
+            <MudTh>Nome da conexão</MudTh>
             <MudTh>Bando de dados</MudTh>
             <MudTh>IP/DNS</MudTh>
             <MudTh>Porta</MudTh>
             <MudTh>Ações</MudTh>
         </HeaderContent>
         <RowTemplate>
+            <MudTd DataLabel="Nome da conexão">@context.Nickname</MudTd>
             <MudTd DataLabel="Banco de dados">@context.Name</MudTd>
             <MudTd DataLabel="IP/DNS">@context.Host</MudTd>
             <MudTd DataLabel="Porta">@context.Port</MudTd>
@@ -77,6 +85,7 @@
                     break;
                 }
             }
+            database.Nickname = database.Nickname.ToUpper();
             AppSettings.DatabaseConfig.Add(database);
             AppSettings.Save();
             database = new DatabaseConfig();
