@@ -56,7 +56,9 @@ public static class DatabaseConfigExtensions
                 {
                     Direction = ParameterDirection.Output
                 });
-            connection.Open();
+
+            if (connection.State != ConnectionState.Open)   
+                connection.Open();
             cmd.ExecuteNonQuery();
             connection.Close();
             return true;
