@@ -7,8 +7,8 @@ public static class DIExtensions
 {
     public static void ConfigureCommonServices(this IServiceCollection services)
     {
-        services.AddScoped<IDbService, DbService>();
+        services.AddSingleton<IDbService, DbService>();
         services.AddScoped<ISyncAPIService, SyncAPIService>();
-        services.AddScoped<ISyncRunner, SyncRunner>();
+        services.AddSingleton<ISyncRunner, SyncRunner>();
     }
 }

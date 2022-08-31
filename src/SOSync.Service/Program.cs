@@ -31,7 +31,7 @@ var host = Host.CreateDefaultBuilder(args)
     .Build();
 
 var serviceScope = host.Services.CreateScope();
-
+await host.RunAsync();
 
 checkLicense:
 var licenseService = serviceScope.ServiceProvider.GetRequiredService<ILicenseService>();
@@ -73,6 +73,10 @@ else
         Console.WriteLine("Dados inválidos, verifique os dados informados e tente novamente!");
         Console.WriteLine("Pressione qualquer tecla para continuar ...");
         Console.ReadKey();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Erro ao realizar o licenciamento! " + ex.Message);
     }
     goto checkLicense;
 }

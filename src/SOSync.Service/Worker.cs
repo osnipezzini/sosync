@@ -10,9 +10,10 @@ public class Worker : BackgroundService
     private readonly ISyncRunner _syncRunner;
     private readonly ILicenseService _licenseService;
 
-    public Worker(ILogger<Worker> logger, ISyncRunner syncRunner, ILicenseService licenseService)
+    public Worker(ILogger<Worker> logger, ISyncRunner syncRunner, IServiceScopeFactory serviceScope)
     {
-        _licenseService = licenseService;
+        var scope = serviceScope.CreateScope();
+        _licenseService = scope.ServiceProvider.GetService<ILicenseService>();
         _syncRunner = syncRunner;
         _logger = logger;
     }
@@ -21,6 +22,7 @@ public class Worker : BackgroundService
     {
         if (AppSettings.SOSyncConfig.ActivateSyncs && _licenseService.HasLicense)
             await SyncService(stoppingToken);
+        await SyncService(stoppingToken);
     }
 
     private async Task SyncService(CancellationToken cancellationToken)

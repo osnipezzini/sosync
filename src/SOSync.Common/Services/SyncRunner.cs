@@ -16,7 +16,7 @@ public class SyncRunner : ISyncRunner
     {
         _logger = logger;
         this.dbService = dbService;
-        _syncConfig = options.Value;
+        _syncConfig = AppSettings.SOSyncConfig;
     }
     private static void Prepare()
     {
