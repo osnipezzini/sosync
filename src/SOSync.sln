@@ -19,6 +19,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOSync.Mobile", "SOSync.Mob
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOSync.Domain", "SOSync.Domain\SOSync.Domain.csproj", "{B2C43DFE-322C-40B7-AD3F-97073E10A081}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Python", "Python", "{D6E8F25B-EFE8-4BA6-905D-41062751729E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Progs", "Progs", "{50AEBBCD-31D9-4A55-9B41-883E9E057FC9}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\Backup\OneDrive\Desktop\Python\prog\prog8003.pyc = ..\..\..\..\Backup\OneDrive\Desktop\Python\prog\prog8003.pyc
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +69,7 @@ Global
 		{E9196829-3089-4B28-BEB6-D033F4318939} = {6F157D08-39D0-4B44-8DB6-B4496DDAF0AF}
 		{4E454A13-00C0-4181-97A1-6BC7E10F18A6} = {CE9C61F5-D58F-45C9-80DE-36FD4BD32ACA}
 		{B2C43DFE-322C-40B7-AD3F-97073E10A081} = {6F157D08-39D0-4B44-8DB6-B4496DDAF0AF}
+		{50AEBBCD-31D9-4A55-9B41-883E9E057FC9} = {D6E8F25B-EFE8-4BA6-905D-41062751729E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D340781E-A8D7-4875-A10A-F43B620F63B8}

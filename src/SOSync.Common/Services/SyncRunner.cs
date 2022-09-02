@@ -10,13 +10,15 @@ public class SyncRunner : ISyncRunner
     private readonly ILogger<SyncRunner> _logger;
     private readonly IDbService dbService;
     private readonly SOSyncConfig _syncConfig;
+    private readonly IProgService progService;
     public DateTime TimeStarted { get => _startTime; }
 
-    public SyncRunner(ILogger<SyncRunner> logger, IOptions<SOSyncConfig> options, IDbService dbService)
+    public SyncRunner(ILogger<SyncRunner> logger, IDbService dbService, IProgService progService)
     {
         _logger = logger;
         this.dbService = dbService;
         _syncConfig = AppSettings.SOSyncConfig;
+        this.progService = progService;
     }
     private static void Prepare()
     {
@@ -80,7 +82,7 @@ public class SyncRunner : ISyncRunner
             var conf = _syncConfig.Databases
                 .First(dbconfig => dbconfig.Nickname == nickname);
 
-            if (nickname.ToLower() != "central")
+            if (!string.IsNullOrEmpty(nickname) && nickname.ToLower() != "central")
             {
                 args += " --db-profile=" + nickname.ToUpper();
             }
@@ -113,6 +115,11 @@ public class SyncRunner : ISyncRunner
 
         Thread.Sleep(2000);
         //SetTimer();
+
+        //Realiza o registro automático do banco de dados.
+        if (_syncConfig.Databases.Count == 0)
+            await progService.TryAutoRegisterDbConfigAsync();
+
         foreach (var item in _syncConfig.Databases)
         {
             if (item.ActiveSync)
