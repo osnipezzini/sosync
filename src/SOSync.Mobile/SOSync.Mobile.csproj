@@ -49,6 +49,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Fonts\typicons.ttf" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <PackageReference Include="CommunityToolkit.Maui" Version="1.2.0" />
 	  <PackageReference Include="SOFramework.Maui" Version="1.1.1" />
 	  <PackageReference Include="SOLogging.MAUI" Version="0.0.2" />

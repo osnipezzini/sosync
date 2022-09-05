@@ -5,6 +5,11 @@
              xmlns:local="clr-namespace:SOSync.Mobile"
              x:Class="SOSync.Mobile.App">
     <Application.Resources>
-        <framework:SOAppStyle/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <framework:SOAppStyle/>
+                <framework:SOColors/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

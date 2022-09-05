@@ -8,7 +8,7 @@
              x:DataType="vm:SyncViewModel"
              Title="Status das sincronias">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding RefreshStatusCommand}">
+        <ToolbarItem Command="{Binding RefreshStatusCommand}" Text="Atualizar" Order="Primary" Priority="1">
             <ToolbarItem.IconImageSource>
                 <FontImageSource FontFamily="Typicon"
                                  Glyph="{x:Static fonts:Typicon.Refresh}"
