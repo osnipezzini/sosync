@@ -26,6 +26,7 @@ public class APIService : IAPIService
             var syncs = new List<Sync>();
             foreach (var item in AppSettings.DatabaseConfig)
             {
+                _logger.LogInformation("Buscando lista dos status da sincronia");
                 var newSync = await item.ListSyncStatus();
 
                 if (newSync != null)
@@ -40,6 +41,7 @@ public class APIService : IAPIService
         }
         catch (Exception ex)
         {
+            _logger.LogError("Não foi possivel pegar a lista de status da sincronia" + ex.Message, ex);
             throw new Exception(ex.Message);
         }
 

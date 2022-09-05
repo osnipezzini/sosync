@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using SOSync.Common.Exceptions;
 using System.Net;
 using System.Text;
 
@@ -75,7 +76,7 @@ public class ProgService : IProgService
                     _logger.LogError(message);
                     throw new Exception(message);
                 case HttpStatusCode.InternalServerError:
-                    throw new NotImplementedException();
+                    throw new NotInicializedException();
                 default:
                     message = $"O servidor retornou um status não mapeado: {path}";
                     _logger.LogError(message);
@@ -83,10 +84,10 @@ public class ProgService : IProgService
 
             }
         }
-        catch (NotImplementedException nie)
+        catch (NotInicializedException nie)
         {
             _logger.LogError($"Não conseguimos contatar o prog em tempo hábil.");
-            throw new NotImplementedException(nie.Message, nie);
+            throw new NotInicializedException(nie.Message, nie);
         }
         catch (HttpRequestException hre)
         {
@@ -129,7 +130,7 @@ public class ProgService : IProgService
             AppSettings.Save();
 
         }
-        catch (NotImplementedException nie)
+        catch (NotInicializedException nie)
         {
             goto retryGetDbInfo;
         }
