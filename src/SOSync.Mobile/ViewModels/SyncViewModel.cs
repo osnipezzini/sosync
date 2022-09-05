@@ -30,17 +30,7 @@ public partial class SyncViewModel : SOViewModel
 
     private async Task ExecuteRefreshStatusCommand()
     {
-        var listSync = Syncs.ToList();
-        await Task.Delay(200);
-
-        if (listSync[1].Status == StatusImages.OK)
-            listSync[1].Status = StatusImages.Delayed;
-        else
-            listSync[1].Status = StatusImages.OK;
-
-        Syncs.Clear();
-        foreach (var syncDict in listSync)
-            Syncs.Add(syncDict);
+        await RefreshSyncList();
     }
 
     [RelayCommand]
@@ -62,7 +52,7 @@ public partial class SyncViewModel : SOViewModel
             foreach (var bomba in bombas)
                 Syncs.Add(bomba);
         }
-
+        
         IsBusy = false;
     }
 }
