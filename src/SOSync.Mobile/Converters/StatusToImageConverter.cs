@@ -8,7 +8,7 @@ internal class StatusToImageConverter : IValueConverter
     {
         if (value is string status)
         {
-            var imgPath = DeviceInfo.Platform == DevicePlatform.WinUI ? $"Assets/{status}.png" : $"{status}.png";
+            var imgPath = DeviceInfo.Platform == DevicePlatform.WinUI ? $"{status}.png" : $"{status}.png";
             return ImageSource.FromFile(imgPath);
         }
         else
