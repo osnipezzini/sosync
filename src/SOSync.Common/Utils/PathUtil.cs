@@ -1,6 +1,6 @@
 ﻿using CliWrap;
 using CliWrap.Buffered;
-
+using CliWrap.EventStream;
 using System.Diagnostics;
 using System.Reflection;
 
@@ -79,7 +79,7 @@ public class PathUtil
         }
 
     }
-    public async static Task<bool> StartProcessAsync(string filename, string args, string work_dir, int WaitExit)
+    public async static Task<bool> StartProcessAsync(string filename, string args, string work_dir, int WaitExit, bool buffered = true)
     {
         string logfile = Path.Combine(PathUtil.AssemblyDirectory, "manutencao.log");
         try
@@ -94,7 +94,29 @@ public class PathUtil
                 .WithWorkingDirectory(work_dir)
                 .WithStandardOutputPipe(PipeTarget.ToDelegate((message) => Instance.OnLogInfo?.Invoke(Instance, message)));
             Instance.OnLogDebug?.Invoke(Instance, $"Comando executado : {filename} {args} utilizando a pasta de trabalho : {work_dir}");
-            var result = await cmd.ExecuteBufferedAsync(cts.Token);
+
+            if (buffered)
+                await cmd.ExecuteBufferedAsync(cts.Token);
+            else
+            {
+                await foreach (var cmdEvent in cmd.ListenAsync())
+                {
+                    switch (cmdEvent)
+                    {
+                        case StartedCommandEvent started:
+                            return true;
+                        case StandardOutputCommandEvent commandEvent:
+                            return true;
+                        case StandardErrorCommandEvent standardError:
+                            throw new Exception(standardError.Text);
+                        case ExitedCommandEvent exited:
+                            throw new Exception("O processo foi finalizado!");
+
+                        default:
+                            throw new Exception("Erro não mapeado!");
+                    }
+                }
+            }
 
             return true;
         }
@@ -104,6 +126,7 @@ public class PathUtil
             return false;
         }
     }
+
     public static bool FileCompare(string file1, string file2)
     {
         int file1byte;

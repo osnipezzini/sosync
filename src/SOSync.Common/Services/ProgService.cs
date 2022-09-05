@@ -26,7 +26,7 @@ public class ProgService : IProgService
     {
         var workDir = "C:\\autosystem";
         var filename = "C:\\autosystem\\manutencao.exe";
-        int exitDelay = 120;
+        int exitDelay = 1;
         var args = "--prog 8003";
 
         if (OperatingSystem.IsLinux())
@@ -38,7 +38,7 @@ public class ProgService : IProgService
         try
         {
             _logger.LogInformation("Aguardando inicialização do prog!");
-            var result = await PathUtil.StartProcessAsync(filename, args, workDir, exitDelay);
+            var result = await PathUtil.StartProcessAsync(filename, args, workDir, exitDelay, buffered: false);
             _logger.LogInformation("Prog iniciado com sucesso.");
             return true;
 
@@ -74,12 +74,19 @@ public class ProgService : IProgService
                     message = $"Rota não encontrada: {path}";
                     _logger.LogError(message);
                     throw new Exception(message);
+                case HttpStatusCode.InternalServerError:
+                    throw new NotImplementedException();
                 default:
                     message = $"O servidor retornou um status não mapeado: {path}";
                     _logger.LogError(message);
                     throw new Exception(message);
 
             }
+        }
+        catch (NotImplementedException nie)
+        {
+            _logger.LogError($"Não conseguimos contatar o prog em tempo hábil.");
+            throw new NotImplementedException(nie.Message, nie);
         }
         catch (HttpRequestException hre)
         {
@@ -100,30 +107,20 @@ public class ProgService : IProgService
     public async Task<bool> TryAutoRegisterDbConfigAsync()
     {
         var triedRegister = 0;
-        var triedStartProg = 0;
-
+    retryGetDbInfo:
         try
         {
-        retryStartProg:
-            triedStartProg++;
-            triedRegister = 0;
             await RunProgAsync();
-
-            if (triedStartProg == 3)
-                throw new Exception("Não foi possivel inicializar ou buscar informações do prog");
-
-            retryGetDbInfo:
             triedRegister++;
 
-            if (triedRegister == 3)
-                goto retryStartProg;
+            if (triedRegister > 3)
+                throw new Exception("Numero máximo de tentativas para auto-configuração!");
 
-            await Task.Delay(4000);
+            await Task.Delay(9000);
             var dbInfo = await GetDbInfo();
 
             if (dbInfo is null)
                 goto retryGetDbInfo;
-
 
             if (AppSettings.DatabaseConfig.Count > 0)
                 return false;
@@ -131,6 +128,10 @@ public class ProgService : IProgService
             AppSettings.DatabaseConfig.Add(dbInfo);
             AppSettings.Save();
 
+        }
+        catch (NotImplementedException nie)
+        {
+            goto retryGetDbInfo;
         }
         catch (Exception ex)
         {

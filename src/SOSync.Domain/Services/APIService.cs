@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using SOSync.Abstractions.Models;
 using SOSync.Common;
+using SOSync.Common.Services;
 using SOSync.Domain.Interfaces;
 
 namespace SOSync.Domain.Services;
@@ -9,15 +9,20 @@ namespace SOSync.Domain.Services;
 public class APIService : IAPIService
 {
     private readonly ILogger<APIService> _logger;
-    public APIService(ILogger<APIService> logger)
-	{
-		_logger = logger;
-	}
+    private readonly IProgService progService;
+    public APIService(ILogger<APIService> logger, IProgService progService)
+    {
+        this.progService = progService;
+        _logger = logger;
+    }
 
-	public async Task<List<Sync>> GetSyncs()
-	{
-		try
-		{
+    public async Task<List<Sync>> GetSyncs()
+    {
+        try
+        {
+            if (AppSettings.DatabaseConfig.Count == 0)
+                await progService.TryAutoRegisterDbConfigAsync();
+
             var syncs = new List<Sync>();
             foreach (var item in AppSettings.DatabaseConfig)
             {
@@ -37,6 +42,6 @@ public class APIService : IAPIService
         {
             throw new Exception(ex.Message);
         }
-		
-	}
+
+    }
 }
