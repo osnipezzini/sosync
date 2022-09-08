@@ -1,5 +1,6 @@
 ﻿using Microsoft.AppCenter.Crashes;
 using Microsoft.Extensions.DependencyInjection;
+using SOCore.Services;
 using System.Net;
 using System.Text;
 
@@ -13,13 +14,15 @@ public class SyncAPIService : ISyncAPIService
 {
     private readonly HttpClient? httpClient;
     private readonly ILogger<SyncAPIService>? logger;
+    private readonly ILicenseService licenseService;
 
-    public SyncAPIService(IServiceProvider serviceProvider)
+    public SyncAPIService(IServiceProvider serviceProvider, ILicenseService licenseService)
     {
         httpClient = serviceProvider.GetService<HttpClient>();
-        if (httpClient is not null)
-            httpClient.BaseAddress = new Uri("https://c5ba-2804-30c-166d-fa00-5d5b-4e70-5847-57b8.sa.ngrok.io");
+        if (httpClient is not null && licenseService.IsValid && !string.IsNullOrEmpty(licenseService.License.ServerIP))
+            httpClient.BaseAddress = new Uri(licenseService.License.ServerIP);
         logger = serviceProvider.GetService<ILogger<SyncAPIService>>();
+        this.licenseService = licenseService;
     }
 
     public async Task<List<Sync>?> GetStatusSync()
