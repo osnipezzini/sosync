@@ -86,18 +86,18 @@ public class ProgService : IProgService
         }
         catch (NotInicializedException nie)
         {
-            _logger.LogError($"Não conseguimos contatar o prog em tempo hábil.");
+            _logger.LogError($"Não conseguimos contatar o prog em tempo hábil. ");
             throw new NotInicializedException(nie.Message, nie);
         }
         catch (HttpRequestException hre)
         {
-            _logger.LogError($"Não conseguimos contatar o prog em tempo hábil.");
+            _logger.LogError($"Não conseguimos contatar o prog em tempo hábil. ");
             throw new Exception(hre.Message, hre);
         }
         catch (Exception ex)
         {
             _logger.LogDebug("------------------------------------------------------------------");
-            _logger.LogDebug($"Ocorreu um erro fatal ao carregar os dados do prog.");
+            _logger.LogDebug($"Ocorreu um erro fatal ao carregar os dados do prog. ");
             _logger.LogDebug($"Path: {path}");
             _logger.LogDebug("------------------------------------------------------------------");
             throw new Exception(ex.Message, ex);
@@ -115,7 +115,7 @@ public class ProgService : IProgService
             triedRegister++;
 
             if (triedRegister > 3)
-                throw new Exception("Numero máximo de tentativas para auto-configuração!");
+                throw new Exception(" Numero máximo de tentativas para auto-configuração. Tente mais tarde ou realize a configuração manualmente atrávez do menu! (https://{SEUIP}:7067/)");
 
             await Task.Delay(9000);
             var dbInfo = await GetDbInfo();
