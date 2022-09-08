@@ -1,5 +1,5 @@
-﻿using SOSync.Common.Services;
-using SOSync.Common.Utils;
+﻿using Microsoft.Extensions.Logging;
+using SOSync.Common.Services;
 
 namespace SOSync.Mobile.ViewModels;
 
@@ -9,6 +9,7 @@ public partial class SyncViewModel : SOViewModel
     private Sync selectedSync;
     private bool isVisible;
     private readonly ISyncAPIService aPIService;
+    private readonly ILogger logger;
 
 
     public bool IsVisible
@@ -18,15 +19,17 @@ public partial class SyncViewModel : SOViewModel
             if (Syncs.Count > 0)
                 isVisible = false;
             else isVisible = true;
-        } }
+        }
+    }
     public ObservableCollection<Sync> Syncs { get; }
     public Command RefreshStatusCommand { get; }
-    public SyncViewModel(ISyncAPIService syncAPIService)
-	{
-		Syncs = new ObservableCollection<Sync>();
+    public SyncViewModel(ISyncAPIService syncAPIService, ILogger<SyncViewModel> logger)
+    {
+        this.logger = logger;
+        Syncs = new ObservableCollection<Sync>();
         RefreshStatusCommand = new Command(async () => await ExecuteRefreshStatusCommand());
         aPIService = syncAPIService;
-	}
+    }
 
     private async Task ExecuteRefreshStatusCommand()
     {
@@ -44,15 +47,28 @@ public partial class SyncViewModel : SOViewModel
     {
         IsBusy = true;
 
-        var bombas = await aPIService.GetStatusSync();
-
-        if (bombas is not null)
+        try
         {
-            Syncs.Clear();
-            foreach (var bomba in bombas)
-                Syncs.Add(bomba);
+            var syncs = await aPIService.GetStatusSync();
+
+            if (syncs is not null)
+            {
+                Syncs.Clear();
+                foreach (var sync in syncs)
+                    Syncs.Add(sync);
+            }
         }
-        
-        IsBusy = false;
+        catch (Exception ex)
+        {
+            logger.LogDebug(ex.StackTrace);
+            logger.LogError(ex, "Erro ao buscar lista de sincronias");
+#if ANDROID
+            await DisplayAlert(ex.Message, "ERRO FATAL");
+#endif
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 }
