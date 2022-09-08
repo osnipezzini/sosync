@@ -8,8 +8,11 @@
     <MudCardContent>
         <EditForm class="row g-3" Model="AppSettings.SOSyncConfig">
             <MudGrid>
-                <MudItem xs="12">
+                <MudItem xs="6">
                     <MudTextField required @bind-Value="@AppSettings.SOSyncConfig.SyncMaxTime" Label="Tempo máximo de espera!" />
+                </MudItem>
+                <MudItem xs="6">
+                    <MudTextField required @bind-Value="@AppSettings.SOSyncConfig.SyncDelay" Label="Tempo de spera entre as sincronias!" />
                 </MudItem>
                 <MudItem xs="6">
                     <MudCheckBox @bind-Checked="@AppSettings.SOSyncConfig.ReplaceSyncFiles" Label="Subistituir arquivos do ftp" />
