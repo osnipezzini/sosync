@@ -10,6 +10,7 @@ public class AppConstants
     public const string IOSModuleId = "b5f921b3-b64e-467e-932d-4235f1cc3677";
     public const string MacModuleId = "4b6467b9-67aa-4afd-91bd-e84e58959380";
     public const string ServiceId = "74e0678f-6500-49bc-b8f2-d58b302e5174";
+    public const string IpProg = "http://127.0.0.1:8007";
 
     public const string AppInsightsKey = "InstrumentationKey=635cbeac-3974-455c-a644-f9e01df903df;" +
         "IngestionEndpoint=https://brazilsouth-1.in.applicationinsights.azure.com/;" +

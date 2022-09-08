@@ -42,6 +42,20 @@ public partial class SyncViewModel : SOViewModel
             {"Sync", sync }
         });
 
+
+    public override Task OnAppearing()
+    {
+        App.timer.Interval = new TimeSpan(0, 0, 60);
+        App.timer.Tick += Timer_Tick;
+
+        return base.OnAppearing();
+    }
+
+    private async void Timer_Tick(object sender, EventArgs e)
+    {
+        await RefreshSyncList();
+    }
+
     [RelayCommand]
     private async Task RefreshSyncList()
     {
@@ -65,6 +79,7 @@ public partial class SyncViewModel : SOViewModel
 #if ANDROID
             await DisplayAlert(ex.Message, "ERRO FATAL");
 #endif
+            await Shell.Current.DisplayAlert(ex.Message, "ERRO FATAL", "Ok");
         }
         finally
         {

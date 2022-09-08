@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.DependencyInjection;
 using SOSync.Common.Exceptions;
 using System.Net;
 using System.Text;
@@ -12,13 +11,12 @@ public class ProgService : IProgService
     private readonly HttpClient? httpClient;
     private readonly IMapper mapper;
 
-
-    public ProgService(ILogger<ProgService> logger, IServiceProvider serviceProvider, IMapper mapper)
+    public ProgService(ILogger<ProgService> logger, IMapper mapper)
     {
         this.mapper = mapper;
         httpClient = new HttpClient();
         if (httpClient is not null)
-            httpClient.BaseAddress = new Uri("http://127.0.0.1:8007");
+            httpClient.BaseAddress = new Uri(AppConstants.IpProg);
 
         _logger = logger;
     }

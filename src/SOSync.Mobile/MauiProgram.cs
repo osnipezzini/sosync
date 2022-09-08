@@ -11,7 +11,7 @@ public static class MauiProgram
     {
 #if DEBUG
         Environment.SetEnvironmentVariable("SOLOGLEVEL", "10");
-        Environment.SetEnvironmentVariable("SOTECHDEV", "1");
+        //Environment.SetEnvironmentVariable("SOTECHDEV", "1");
         Environment.SetEnvironmentVariable("SODEBUG", "1");
 #endif
 
