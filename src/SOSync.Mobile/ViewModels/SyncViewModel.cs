@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using SOCore.Models;
+using SOCore.Services;
 using SOSync.Common.Services;
 
 namespace SOSync.Mobile.ViewModels;
@@ -10,6 +12,7 @@ public partial class SyncViewModel : SOViewModel
     private bool isVisible;
     private readonly ISyncAPIService aPIService;
     private readonly ILogger logger;
+    private readonly ILicenseService license;
 
 
     public bool IsVisible
@@ -23,8 +26,9 @@ public partial class SyncViewModel : SOViewModel
     }
     public ObservableCollection<Sync> Syncs { get; }
     public Command RefreshStatusCommand { get; }
-    public SyncViewModel(ISyncAPIService syncAPIService, ILogger<SyncViewModel> logger)
+    public SyncViewModel(ISyncAPIService syncAPIService, ILogger<SyncViewModel> logger, IServiceProvider serviceProvider)
     {
+        this.license = serviceProvider.GetRequiredService<ILicenseService>();
         this.logger = logger;
         Syncs = new ObservableCollection<Sync>();
         RefreshStatusCommand = new Command(async () => await ExecuteRefreshStatusCommand());
@@ -63,6 +67,9 @@ public partial class SyncViewModel : SOViewModel
 
         try
         {
+            if (!license.IsValid)
+                return;
+
             var syncs = await aPIService.GetStatusSync();
 
             if (syncs is not null)

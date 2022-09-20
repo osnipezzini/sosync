@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui;
+using SOCore;
 using SOLogging;
 using SOSync.Common.Services;
 
@@ -37,6 +38,7 @@ public static class MauiProgram
     public static void Init(this IServiceCollection _services)
     {
         _services.AddScoped<ISyncAPIService, SyncAPIService>();
+        _services.AddSOCore();
     }
 
     public static T GetService<T>()
