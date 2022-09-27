@@ -1,30 +1,310 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="*" Name="Setup_SOSync" Language="1033" Version="1.0.0.0" Manufacturer="" UpgradeCode="46b36748-921e-4f24-9b76-ca400615c85e">
-		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+	<?define customActionFolder="$(var.ProjectDir)\..\SOSync.CustomAction\bin\Debug"?>
+	<?define APPID="24057664-5DA8-41BD-8DCC-98D04AA1A430"?>
+	<?define APP_NAME="SOSync"?>
+	<?define progDirFolder="C:\autosystem\prog"?>
+	<?define scriptPowerShell="&powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -InstallDir 'C:\Program Files\dotnet' -Quality preview ""?>
+	<Product Id="$(var.APPID)" Name="SOTicket" Language="1033" Version="1.0.0.0" Manufacturer="SOTech Sistemas" UpgradeCode="73a7a43f-9dd8-4060-b2d2-caf74d1feb46">
+		<Package Id="$(var.APPID)" Description="Sistema de gerenciamento de inventários" Keywords="Installer" Compressed="yes" Manufacturer="SOTech Sistemas" InstallScope="perMachine" Platform="x64"/>
+		<!-- Adiciona um incone no instalador-->
+		<Property Id="POWERSHELLEXECHECK">
+			<RegistrySearch Id="POWERSHELLEXECHECK"
+				Type="raw"
+				Root="HKLM"
+				Key="SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell"
+				Name="Path" />
+		</Property>
+		<Condition Message="É necessário instalar o Windows PowerShell.">
+			<![CDATA[Installed OR POWERSHELLEXECHECK]]>
+		</Condition>
+		<Property Id="APPID" Value="$(var.APPID)" />
+		<Property Id="APP_NAME" Value="$(var.APP_NAME)" />
+		<Icon Id="icon.ico" SourceFile="Images\Icon.ico" />
+		<Property Id="ARPPRODUCTICON" Value="icon.ico" />
+		<UI>
+			<UIRef Id="WixUI_Mondo" />
+			<Publish Dialog="SetupTypeDlg"
+					 Control="Back"
+					 Event="NewDialog"
+					 Value="WelcomeDlg"
+					 Order="2">1</Publish>
+			<UIRef Id="WixUI_ErrorProgressText" />
 
-		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-		<MediaTemplate />
+			<!--Aqui fica toda a interface da tela de licença e o evento do botão Next da tela de bem-vindo a qual leva a tela de licenciamento.-->
+			<Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="Licence" Order="10">NOT Installed</Publish>
+			<Dialog Id="Licence" Width="370" Height="270" Title="Licenciamento">
+				<Control Type="Edit" Id="cnpj_edit" Width="229" Height="15" X="70" Y="132" Property="CNPJ" />
+				<Control Type="Edit" Id="password_edit" Width="229" Height="15" X="70" Y="169" Property="PASSWORD" />
+				<Control Type="Text" Id="info_txt" Width="182" Height="14" X="90" Y="58" Text="Para utilizar o aplicativo ele deve ser licenciado." NoPrefix="yes" Transparent="yes" />
+				<Control Type="Text" Id="info2_txt" Width="198" Height="24" X="90" Y="72" Text="Forneça os dados informados por seu fornecedor para efetuar o licenciamento" NoPrefix="yes" Transparent="yes" />
+				<Control Type="Text" Id="cnpj_text" Width="50" Height="11" X="80" Y="118" Text="CPF/CNPJ:" NoPrefix="yes" Transparent="yes" />
+				<Control Type="Text" Id="passoword_txt" Width="93" Height="11" X="80" Y="158" Text="Senha de instalação:" NoPrefix="yes" Transparent="yes" />
+				<Control Type="Bitmap" Id="image" Width="105" Height="44" X="131" Y="7" TabSkip="no" Text="LogoSotech">
+					<Binary Id="LogoSotech" SourceFile="Images\LogoSOTech.bmp" />
+				</Control>
+				<Control Type="PushButton" Id="licenciar_btn" Width="56" Height="17" X="292" Y="244" Text="Continuar">
+					<Publish Event="DoAction" Value="ActionLicenciar" Order="9">1</Publish>
+					<Publish Property="STATUSCODE" Value="CustomActions1"></Publish>
+					<Publish Property="ERRORMSG" Value="CustomActions1"></Publish>
+					<Publish Event="SpawnDialog" Value="InvalidDBConnDlg" Order="10"><![CDATA[ STATUSCODE = 5 ]]></Publish>
+					<Publish Property="CNPJ" Value="[CNPJ]" Order="11">1</Publish>
+					<Publish Property="PASSWORD" Value="[PASSWORD]" Order="11">1</Publish>
+					<Publish Event="NewDialog" Value="SetupTypeDlg" Order="13"><![CDATA[ STATUSCODE = 1 ]]></Publish>
+				</Control>
+				<Control Type="PushButton" Id="back_btn" Width="56" Height="17" X="232" Y="244" Text="Voltar">
+					<Publish Event="NewDialog" Value="WelcomeDlg" Order="10" />
+				</Control>
+				<Control Type="Edit" Id="register_edit" Width="229" Height="15" X="70" Y="206" Disabled="yes" Text="[SERIAL]" Property="SERIAL" />
+				<Control Type="Text" Id="register_txt" Width="50" Height="17" X="82" Y="191" Text="Serial:" />
+			</Dialog>
+			<Dialog Id="InvalidDBConnDlg" Width="260" Height="120" Title="[ProductName]">
+				<Control Id="OK" Type="PushButton" X="102" Y="90" Width="56" Height="17" Default="yes" Cancel="yes" Text="OK">
+					<Publish Event="EndDialog" Value="Return" Order="10" />
+				</Control>
+				<Control Id="Text" Type="Text" X="48" Y="22" Width="194" Height="60" Text="[ERRORMSG]" />
+				<Control Id="Icon" Type="Icon" X="15" Y="15" Width="24" Height="24" ToolTip="Information icon" FixedSize="yes" IconSize="32" Text="WixUI_Ico_Exclam" />
+			</Dialog>
+		</UI>
 
-		<Feature Id="ProductFeature" Title="Setup_SOSync" Level="1">
-			<ComponentGroupRef Id="ProductComponents" />
-		</Feature>
-	</Product>
-
-	<Fragment>
+		<!--Este trexo do WixVariabel carrega algumas imagens e o documento para exibir na tela de termos de uso-->
+		<WixVariable Id="WixUIBannerBmp" Value="Images\Banner.bmp" />
+		<WixVariable Id="WixUIDialogBmp" Value="Images\Logo.bmp" />
+		<WixVariable Id="WixUILicenseRtf" Value="Docs\Documento.rtf" />
+		<MajorUpgrade DowngradeErrorMessage="Uma versao mais recente do [ProductName] ja esta instalada!" />
+		<MediaTemplate EmbedCab="yes" />
+		<Condition Message="Voce precisa executar o instalador como administrador!">
+			Privileged
+		</Condition>
+		<Property Id="WIXUI_INSTALLDIR" Value="CONFIG" />
+		<!-- Passo 1: Define o diretório de destino-->
 		<Directory Id="TARGETDIR" Name="SourceDir">
-			<Directory Id="ProgramFilesFolder">
-				<Directory Id="INSTALLFOLDER" Name="Setup_SOSync" />
+			<Directory Id="ProgramFiles64Folder">
+				<Directory Id="CONFIG" Name="SOTicket" />
+				<Directory Id="SERVICE" Name="SOTicket" />
+				<Directory Id="PROG" Name="ConfigFileProg">
+					<Directory Id="INSTALLDIR" Name="autosystem">
+						<Component Id="ConfigFileProg" Guid="ea0aa2aa-eaa8-41c0-b53b-3a4df48c4705" Win64="yes">
+							<File Id="ConfigFile" Name="prog8003.pyc" Source="Python\prog\prog8003.pyc" KeyPath="yes"></File>
+						</Component>
+					</Directory>
+				</Directory>
+				<Directory Id="MANAGER" Name="SOTicket" />
+				<Directory Id="BACKEND" Name="SOTicket" />
 			</Directory>
 		</Directory>
-	</Fragment>
+		<!-- Passo 2: Adiciona as pastas para seu pacote de instação-->
+		<Property Id="DIR_PROG_FOLDER" Value="C:\autosystem\prog\" />
+		<Binary Id="CustomActions" SourceFile="$(var.customActionFolder)\SOTicket.CustomAction.CA.dll" />
+		<DirectoryRef Id="TARGETDIR">
+			<Directory Id="DIR_PROG_FOLDER">
+				<Component Id="ConfigGeneratorProg" Guid="56ed28af-9359-4e11-82fa-a18e5241a199">
+					<CopyFile Id="ConfigGeneratorProg" DestinationDirectory="DIR_PROG_FOLDER" FileId="ConfigFile" />
+				</Component>
+			</Directory>
+		</DirectoryRef>
+		<!--Atenção para abrir com o WixEditor deverá remover os DiretoryRef pois o mesmo não é capaz de abrir com os arquivos-->
+		<DirectoryRef Id="CONFIG">
+			<Component Id="CONFIG_COMPONENT" Guid="E00BD836-136F-433C-A97D-ED05AA5CFCC9" Win64="yes">
+				<File Id="SOTICKET.CONFIG.EXE" Name="SOTicket.Config.exe" Source="C:\build\SOTicket-1.3.6\SOTicket.Config.exe"/>
+				<File Id="AUTOMAPPER.DLL" Name="AutoMapper.dll" Source="C:\build\SOTicket-1.3.6\AutoMapper.dll" />
+				<File Id="AUTOMAPPER.EXTENSIONS.MICROSOFT.DEPENDENCYINJECTION.DLL" Name="AutoMapper.Extensions.Microsoft.DependencyInjection.dll" Source="C:\build\SOTicket-1.3.6\AutoMapper.Extensions.Microsoft.DependencyInjection.dll" />
+				<File Id="BLAZORED.LOCALSTORAGE.DLL" Name="Blazored.LocalStorage.dll" Source="C:\build\SOTicket-1.3.6\Blazored.LocalStorage.dll" />
+				<File Id="DAPPER.DATAANNOTATIONS.DLL" Name="Dapper.DataAnnotations.dll" Source="C:\build\SOTicket-1.3.6\Dapper.DataAnnotations.dll" />
+				<File Id="DAPPER.DLL" Name="Dapper.dll" Source="C:\build\SOTicket-1.3.6\Dapper.dll" />
+				<File Id="DEVICEID.DLL" Name="DeviceId.dll" Source="C:\build\SOTicket-1.3.6\DeviceId.dll" />
+				<File Id="DEVICEID.LINUX.DLL" Name="DeviceId.Linux.dll" Source="C:\build\SOTicket-1.3.6\DeviceId.Linux.dll" />
+				<File Id="DEVICEID.MAC.DLL" Name="DeviceId.Mac.dll" Source="C:\build\SOTicket-1.3.6\DeviceId.Mac.dll" />
+				<File Id="DEVICEID.WINDOWS.DLL" Name="DeviceId.Windows.dll" Source="C:\build\SOTicket-1.3.6\DeviceId.Windows.dll" />
+				<File Id="DEVICEID.WINDOWS.WMI.DLL" Name="DeviceId.Windows.Wmi.dll" Source="C:\build\SOTicket-1.3.6\DeviceId.Windows.Wmi.dll" />
+				<File Id="EFCORE.NAMINGCONVENTIONS.DLL" Name="EFCore.NamingConventions.dll" Source="C:\build\SOTicket-1.3.6\EFCore.NamingConventions.dll" />
+				<File Id="HARDWARE.INFO.DLL" Name="Hardware.Info.dll" Source="C:\build\SOTicket-1.3.6\Hardware.Info.dll" />
+				<File Id="HTTPEXTENSION.DLL" Name="HttpExtension.dll" Source="C:\build\SOTicket-1.3.6\HttpExtension.dll" />
+				<File Id="HUMANIZER.DLL" Name="Humanizer.dll" Source="C:\build\SOTicket-1.3.6\Humanizer.dll" />
+				<File Id="MICROSOFT.APPLICATIONINSIGHTS.DLL" Name="Microsoft.ApplicationInsights.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.ApplicationInsights.dll" />
+				<File Id="MICROSOFT.ASPNETCORE.AUTHENTICATION.JWTBEARER.DLL" Name="Microsoft.AspNetCore.Authentication.JwtBearer.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.AspNetCore.Authentication.JwtBearer.dll" />
+				<File Id="MICROSOFT.ASPNETCORE.AUTHORIZATION.DLL" Name="Microsoft.AspNetCore.Authorization.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.AspNetCore.Authorization.dll" />
+				<File Id="MICROSOFT.ASPNETCORE.COMPONENTS.AUTHORIZATION.DLL" Name="Microsoft.AspNetCore.Components.Authorization.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.AspNetCore.Components.Authorization.dll" />
+				<File Id="MICROSOFT.ASPNETCORE.COMPONENTS.DLL" Name="Microsoft.AspNetCore.Components.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.AspNetCore.Components.dll" />
+				<File Id="MICROSOFT.ASPNETCORE.COMPONENTS.FORMS.DLL" Name="Microsoft.AspNetCore.Components.Forms.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.AspNetCore.Components.Forms.dll" />
+				<File Id="MICROSOFT.ASPNETCORE.COMPONENTS.WEB.DLL" Name="Microsoft.AspNetCore.Components.Web.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.AspNetCore.Components.Web.dll" />
+				<File Id="MICROSOFT.ASPNETCORE.COMPONENTS.WEBASSEMBLY.AUTHENTICATION.DLL" Name="Microsoft.AspNetCore.Components.WebAssembly.Authentication.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.AspNetCore.Components.WebAssembly.Authentication.dll" />
+				<File Id="MICROSOFT.ASPNETCORE.CONNECTIONS.ABSTRACTIONS.DLL" Name="Microsoft.AspNetCore.Connections.Abstractions.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.AspNetCore.Connections.Abstractions.dll" />
+				<File Id="MICROSOFT.ASPNETCORE.DIAGNOSTICS.ENTITYFRAMEWORKCORE.DLL" Name="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.dll" />
+				<File Id="MICROSOFT.ASPNETCORE.HTTP.CONNECTIONS.CLIENT.DLL" Name="Microsoft.AspNetCore.Http.Connections.Client.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.AspNetCore.Http.Connections.Client.dll" />
+				<File Id="MICROSOFT.ASPNETCORE.HTTP.CONNECTIONS.COMMON.DLL" Name="Microsoft.AspNetCore.Http.Connections.Common.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.AspNetCore.Http.Connections.Common.dll" />
+				<File Id="MICROSOFT.ASPNETCORE.METADATA.DLL" Name="Microsoft.AspNetCore.Metadata.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.AspNetCore.Metadata.dll" />
+				<File Id="MICROSOFT.ASPNETCORE.SIGNALR.CLIENT.CORE.DLL" Name="Microsoft.AspNetCore.SignalR.Client.Core.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.AspNetCore.SignalR.Client.Core.dll" />
+				<File Id="MICROSOFT.ASPNETCORE.SIGNALR.CLIENT.DLL" Name="Microsoft.AspNetCore.SignalR.Client.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.AspNetCore.SignalR.Client.dll" />
+				<File Id="MICROSOFT.ASPNETCORE.SIGNALR.COMMON.DLL" Name="Microsoft.AspNetCore.SignalR.Common.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.AspNetCore.SignalR.Common.dll" />
+				<File Id="MICROSOFT.ASPNETCORE.SIGNALR.PROTOCOLS.JSON.DLL" Name="Microsoft.AspNetCore.SignalR.Protocols.Json.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.AspNetCore.SignalR.Protocols.Json.dll" />
+				<File Id="MICROSOFT.ENTITYFRAMEWORKCORE.ABSTRACTIONS.DLL" Name="Microsoft.EntityFrameworkCore.Abstractions.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.EntityFrameworkCore.Abstractions.dll" />
+				<File Id="MICROSOFT.ENTITYFRAMEWORKCORE.DESIGN.DLL" Name="Microsoft.EntityFrameworkCore.Design.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.EntityFrameworkCore.Design.dll" />
+				<File Id="MICROSOFT.ENTITYFRAMEWORKCORE.DLL" Name="Microsoft.EntityFrameworkCore.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.EntityFrameworkCore.dll" />
+				<File Id="MICROSOFT.ENTITYFRAMEWORKCORE.RELATIONAL.DLL" Name="Microsoft.EntityFrameworkCore.Relational.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.EntityFrameworkCore.Relational.dll" />
+				<File Id="MICROSOFT.EXTENSIONS.CACHING.MEMORY.DLL" Name="Microsoft.Extensions.Caching.Memory.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.Extensions.Caching.Memory.dll" />
+				<File Id="MICROSOFT.EXTENSIONS.CONFIGURATION.ENVIRONMENTVARIABLES.DLL" Name="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.Extensions.Configuration.EnvironmentVariables.dll" />
+				<File Id="MICROSOFT.EXTENSIONS.CONFIGURATION.USERSECRETS.DLL" Name="Microsoft.Extensions.Configuration.UserSecrets.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.Extensions.Configuration.UserSecrets.dll" />
+				<File Id="MICROSOFT.EXTENSIONS.DEPENDENCYMODEL.DLL" Name="Microsoft.Extensions.DependencyModel.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.Extensions.DependencyModel.dll" />
+				<File Id="MICROSOFT.EXTENSIONS.FEATURES.DLL" Name="Microsoft.Extensions.Features.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.Extensions.Features.dll" />
+				<File Id="MICROSOFT.EXTENSIONS.HOSTING.DLL" Name="Microsoft.Extensions.Hosting.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.Extensions.Hosting.dll" />
+				<File Id="MICROSOFT.EXTENSIONS.LOGGING.ABSTRACTIONS.DLL" Name="Microsoft.Extensions.Logging.Abstractions.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.Extensions.Logging.Abstractions.dll" />
+				<File Id="MICROSOFT.IDENTITYMODEL.ABSTRACTIONS.DLL" Name="Microsoft.IdentityModel.Abstractions.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.IdentityModel.Abstractions.dll" />
+				<File Id="MICROSOFT.IDENTITYMODEL.JSONWEBTOKENS.DLL" Name="Microsoft.IdentityModel.JsonWebTokens.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.IdentityModel.JsonWebTokens.dll" />
+				<File Id="MICROSOFT.IDENTITYMODEL.LOGGING.DLL" Name="Microsoft.IdentityModel.Logging.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.IdentityModel.Logging.dll" />
+				<File Id="MICROSOFT.IDENTITYMODEL.PROTOCOLS.DLL" Name="Microsoft.IdentityModel.Protocols.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.IdentityModel.Protocols.dll" />
+				<File Id="MICROSOFT.IDENTITYMODEL.PROTOCOLS.OPENIDCONNECT.DLL" Name="Microsoft.IdentityModel.Protocols.OpenIdConnect.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll" />
+				<File Id="MICROSOFT.IDENTITYMODEL.TOKENS.DLL" Name="Microsoft.IdentityModel.Tokens.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.IdentityModel.Tokens.dll" />
+				<File Id="MICROSOFT.JSINTEROP.DLL" Name="Microsoft.JSInterop.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.JSInterop.dll" />
+				<File Id="MICROSOFT.OPENAPI.DLL" Name="Microsoft.OpenApi.dll" Source="C:\build\SOTicket-1.3.6\Microsoft.OpenApi.dll" />
+				<File Id="MUDBLAZOR.DLL" Name="MudBlazor.dll" Source="C:\build\SOTicket-1.3.6\MudBlazor.dll" />
+				<File Id="NEWTONSOFT.JSON.DLL" Name="Newtonsoft.Json.dll" Source="C:\build\SOTicket-1.3.6\Newtonsoft.Json.dll" />
+				<File Id="NPGSQL.DLL" Name="Npgsql.dll" Source="C:\build\SOTicket-1.3.6\Npgsql.dll" />
+				<File Id="NPGSQL.ENTITYFRAMEWORKCORE.POSTGRESQL.DLL" Name="Npgsql.EntityFrameworkCore.PostgreSQL.dll" Source="C:\build\SOTicket-1.3.6\Npgsql.EntityFrameworkCore.PostgreSQL.dll" />
+				<File Id="POLLY.DLL" Name="Polly.dll" Source="C:\build\SOTicket-1.3.6\Polly.dll" />
+				<File Id="RGIESECKE.DLLEXPORT.METADATA.DLL" Name="RGiesecke.DllExport.Metadata.dll" Source="C:\build\SOTicket-1.3.6\RGiesecke.DllExport.Metadata.dll" />
+				<File Id="SERILOG.ASPNETCORE.DLL" Name="Serilog.AspNetCore.dll" Source="C:\build\SOTicket-1.3.6\Serilog.AspNetCore.dll" />
+				<File Id="SERILOG.DLL" Name="Serilog.dll" Source="C:\build\SOTicket-1.3.6\Serilog.dll" />
+				<File Id="SERILOG.ENRICHERS.CORRELATIONID.DLL" Name="Serilog.Enrichers.CorrelationId.dll" Source="C:\build\SOTicket-1.3.6\Serilog.Enrichers.CorrelationId.dll" />
+				<File Id="SERILOG.EXCEPTIONS.DLL" Name="Serilog.Exceptions.dll" Source="C:\build\SOTicket-1.3.6\Serilog.Exceptions.dll" />
+				<File Id="SERILOG.EXTENSIONS.HOSTING.DLL" Name="Serilog.Extensions.Hosting.dll" Source="C:\build\SOTicket-1.3.6\Serilog.Extensions.Hosting.dll" />
+				<File Id="SERILOG.EXTENSIONS.LOGGING.DLL" Name="Serilog.Extensions.Logging.dll" Source="C:\build\SOTicket-1.3.6\Serilog.Extensions.Logging.dll" />
+				<File Id="SERILOG.EXTENSIONS.LOGGING.FILE.DLL" Name="Serilog.Extensions.Logging.File.dll" Source="C:\build\SOTicket-1.3.6\Serilog.Extensions.Logging.File.dll" />
+				<File Id="SERILOG.FORMATTING.COMPACT.DLL" Name="Serilog.Formatting.Compact.dll" Source="C:\build\SOTicket-1.3.6\Serilog.Formatting.Compact.dll" />
+				<File Id="SERILOG.SETTINGS.CONFIGURATION.DLL" Name="Serilog.Settings.Configuration.dll" Source="C:\build\SOTicket-1.3.6\Serilog.Settings.Configuration.dll" />
+				<File Id="SERILOG.SINKS.APPLICATIONINSIGHTS.DLL" Name="Serilog.Sinks.ApplicationInsights.dll" Source="C:\build\SOTicket-1.3.6\Serilog.Sinks.ApplicationInsights.dll" />
+				<File Id="SERILOG.SINKS.ASYNC.DLL" Name="Serilog.Sinks.Async.dll" Source="C:\build\SOTicket-1.3.6\Serilog.Sinks.Async.dll" />
+				<File Id="SERILOG.SINKS.CONSOLE.DLL" Name="Serilog.Sinks.Console.dll" Source="C:\build\SOTicket-1.3.6\Serilog.Sinks.Console.dll" />
+				<File Id="SERILOG.SINKS.DEBUG.DLL" Name="Serilog.Sinks.Debug.dll" Source="C:\build\SOTicket-1.3.6\Serilog.Sinks.Debug.dll" />
+				<File Id="SERILOG.SINKS.FILE.DLL" Name="Serilog.Sinks.File.dll" Source="C:\build\SOTicket-1.3.6\Serilog.Sinks.File.dll" />
+				<File Id="SERILOG.SINKS.ROLLINGFILE.DLL" Name="Serilog.Sinks.RollingFile.dll" Source="C:\build\SOTicket-1.3.6\Serilog.Sinks.RollingFile.dll" />
+				<File Id="SOCORE.DLL" Name="SOCore.dll" Source="C:\build\SOTicket-1.3.6\SOCore.dll" />
+				<File Id="SOFRAMEWORK.NET.DLL" Name="SOFramework.NET.dll" Source="C:\build\SOTicket-1.3.6\SOFramework.NET.dll" />
+				<File Id="SOLOGGING.ASPNETCORE.DLL" Name="SOLogging.AspNetCore.dll" Source="C:\build\SOTicket-1.3.6\SOLogging.AspNetCore.dll" />
+				<File Id="SOTICKET.COMMON.DLL" Name="SOTicket.Common.dll" Source="C:\build\SOTicket-1.3.6\SOTicket.Common.dll" />
+				<File Id="SOTICKET.CONFIG.DLL" Name="SOTicket.Config.dll" Source="C:\build\SOTicket-1.3.6\SOTicket.Config.dll" />
+				<File Id="SOTICKET.DOMAIN.DLL" Name="SOTicket.Domain.dll" Source="C:\build\SOTicket-1.3.6\SOTicket.Domain.dll" />
+				<File Id="SWASHBUCKLE.ASPNETCORE.SWAGGER.DLL" Name="Swashbuckle.AspNetCore.Swagger.dll" Source="C:\build\SOTicket-1.3.6\Swashbuckle.AspNetCore.Swagger.dll" />
+				<File Id="SWASHBUCKLE.ASPNETCORE.SWAGGERGEN.DLL" Name="Swashbuckle.AspNetCore.SwaggerGen.dll" Source="C:\build\SOTicket-1.3.6\Swashbuckle.AspNetCore.SwaggerGen.dll" />
+				<File Id="SWASHBUCKLE.ASPNETCORE.SWAGGERUI.DLL" Name="Swashbuckle.AspNetCore.SwaggerUI.dll" Source="C:\build\SOTicket-1.3.6\Swashbuckle.AspNetCore.SwaggerUI.dll" />
+				<File Id="SYSTEM.CODEDOM.DLL" Name="System.CodeDom.dll" Source="C:\build\SOTicket-1.3.6\System.CodeDom.dll" />
+				<File Id="SYSTEM.IDENTITYMODEL.TOKENS.JWT.DLL" Name="System.IdentityModel.Tokens.Jwt.dll" Source="C:\build\SOTicket-1.3.6\System.IdentityModel.Tokens.Jwt.dll" />
+				<File Id="SYSTEM.IO.PIPELINES.DLL" Name="System.IO.Pipelines.dll" Source="C:\build\SOTicket-1.3.6\System.IO.Pipelines.dll" />
+				<File Id="SYSTEM.LINQ.DYNAMIC.CORE.DLL" Name="System.Linq.Dynamic.Core.dll" Source="C:\build\SOTicket-1.3.6\System.Linq.Dynamic.Core.dll" />
+				<File Id="SYSTEM.MANAGEMENT.DLL" Name="System.Management.dll" Source="C:\build\SOTicket-1.3.6\System.Management.dll" />
+				<File Id="APPSETTINGS.DEVELOPMENT.JSON" Name="appsettings.Development.json" Source="C:\build\SOTicket-1.3.6\appsettings.Development.json" />
+				<File Id="APPSETTINGS.JSON" Name="appsettings.json" Source="C:\build\SOTicket-1.3.6\appsettings.json" />
+				<File Id="SOTICKET.CONFIG.DEPS.JSON" Name="SOTicket.Config.deps.json" Source="C:\build\SOTicket-1.3.6\SOTicket.Config.deps.json" />
+				<File Id="SOTICKET.CONFIG.RUNTIMECONFIG.JSON" Name="SOTicket.Config.runtimeconfig.json" Source="C:\build\SOTicket-1.3.6\SOTicket.Config.runtimeconfig.json" />
+				<File Id="SOTICKET.CONFIG.STATICWEBASSETS.RUNTIME.JSON" Name="SOTicket.Config.staticwebassets.runtime.json" Source="C:\build\SOTicket-1.3.6\SOTicket.Config.staticwebassets.runtime.json" />
+			</Component>
+			<Directory Id="runtimes" Name="runtimes">
+				<Directory Id="WIN" Name="win">
+					<Directory Id="LIB" Name="lib">
+						<Directory Id="NET6.0" Name="net6.0">
+							<Component Id="SYSTEM.MANAGEMENT.DLL" DiskId="1" Guid="8EE4F951-FDA3-47D0-9612-059AB1890F5D" Win64="yes">
+								<File Id="SYSTEM.MANAGEMENT.DLL_1" Name="System.Management.dll" Source="C:\build\SOTicket-1.3.6\runtimes\win\lib\net6.0\System.Management.dll" />
+							</Component>
+						</Directory>
+					</Directory>
+				</Directory>
+			</Directory>
+			<Directory Id="Schemas" Name="Schemas">
+				<Component Id="LEIAUTENFE_V4.00.XSD" DiskId="1" Guid="6C9C7EFA-8EC9-40E0-A7AF-3B8194913E57" Win64="yes">
+					<File Id="LEIAUTENFE_V4.00.XSD" Name="leiauteNFe_v4.00.xsd" Source="C:\build\SOTicket-1.3.6\Schemas\leiauteNFe_v4.00.xsd" />
+				</Component>
+				<Component Id="NFE_V4.00.XSD" DiskId="1" Guid="9CD1D1C3-4A79-4E8F-978F-709D825F469C" Win64="yes">
+					<File Id="NFE_V4.00.XSD" Name="nfe_v4.00.xsd" Source="C:\build\SOTicket-1.3.6\Schemas\nfe_v4.00.xsd" />
+				</Component>
+				<Component Id="PROCNFE_V4.00.XSD" DiskId="1" Guid="15DDBC5D-9DB3-44FE-B2F1-DAB8C6DA9A1C" Win64="yes">
+					<File Id="PROCNFE_V4.00.XSD" Name="procNFe_v4.00.xsd" Source="C:\build\SOTicket-1.3.6\Schemas\procNFe_v4.00.xsd" />
+				</Component>
+				<Component Id="TIPOSBASICO_V4.00.XSD" DiskId="1" Guid="AF7B3CE1-17C3-4BE7-9285-FAB057EFCEBF" Win64="yes">
+					<File Id="TIPOSBASICO_V4.00.XSD" Name="tiposBasico_v4.00.xsd" Source="C:\build\SOTicket-1.3.6\Schemas\tiposBasico_v4.00.xsd" />
+				</Component>
+				<Component Id="XMLDSIG_CORE_SCHEMA_V1.01.XSD" DiskId="1" Guid="C9F35D6A-D2CB-44EC-9759-50C5A2242963" Win64="yes">
+					<File Id="XMLDSIG_CORE_SCHEMA_V1.01.XSD" Name="xmldsig-core-schema_v1.01.xsd" Source="C:\build\SOTicket-1.3.6\Schemas\xmldsig-core-schema_v1.01.xsd" />
+				</Component>
+			</Directory>
+		</DirectoryRef>
+		<DirectoryRef Id="SERVICE">
+			<Component Id="SERVICE_COMPONENT" Guid="5D79B8D0-D7EB-4BCC-B0E2-1C7BAA983F62" Win64="yes">
+				<File Id="SOTICKET.SERVICE.EXE" Name="SOTicket.Service.exe" Source="C:\build\SOTicket-1.3.6\SOTicket.Service.exe" />
+				<File Id="SOTICKET.SERVICE.DLL" Name="SOTicket.Service.dll" Source="C:\build\SOTicket-1.3.6\SOTicket.Service.dll" />
+				<File Id="SOTICKET.SERVICE.DEPS.JSON" Name="SOTicket.Service.deps.json" Source="C:\build\SOTicket-1.3.6\SOTicket.Service.deps.json" />
+				<File Id="SOTICKET.SERVICE.RUNTIMECONFIG.JSON" Name="SOTicket.Service.runtimeconfig.json" Source="C:\build\SOTicket-1.3.6\SOTicket.Service.runtimeconfig.json" />
+			</Component>
+		</DirectoryRef>
+		<DirectoryRef Id="MANAGER">
+			<Component Id="MANAGER_COMPONENT" Guid="AA4DE243-6CB6-4FC4-AB55-1F0E0F75B47A" Win64="yes">
+				<File Id="SOTICKET.MANAGER.EXE" Name="SOTicket.Manager.exe" Source="C:\build\SOTicket-1.3.6\SOTicket.Manager.exe" />
+				<File Id="SOTICKET.MANAGER.DLL" Name="SOTicket.Manager.dll" Source="C:\build\SOTicket-1.3.6\SOTicket.Manager.dll" />
+				<File Id="SOTICKET.MANAGER.DEPS.JSON" Name="SOTicket.Manager.deps.json" Source="C:\build\SOTicket-1.3.6\SOTicket.Manager.deps.json" />
+				<File Id="SOTICKET.MANAGER.RUNTIMECONFIG.JSON" Name="SOTicket.Manager.runtimeconfig.json" Source="C:\build\SOTicket-1.3.6\SOTicket.Manager.runtimeconfig.json" />
+				<File Id="SOTICKET.MANAGER.STATICWEBASSETS.RUNTIME.JSON" Name="SOTicket.Manager.staticwebassets.runtime.json" Source="C:\build\SOTicket-1.3.6\SOTicket.Manager.staticwebassets.runtime.json" />
+			</Component>
+		</DirectoryRef>
+		<DirectoryRef Id="BACKEND">
+			<Component Id="BACKEND_COMPONENT" Guid="466F6CAA-87BD-4779-B3DF-2FE9266BA2AC" Win64="yes">
+				<File Id="SOTICKET.BACKEND.EXE" Name="SOTicket.Backend.exe" Source="C:\build\SOTicket-1.3.6\SOTicket.Backend.exe" />
+				<File Id="SOTICKET.BACKEND.DLL" Name="SOTicket.Backend.dll" Source="C:\build\SOTicket-1.3.6\SOTicket.Backend.dll" />
+				<File Id="SOTICKET.BACKEND.DEPS.JSON" Name="SOTicket.Backend.deps.json" Source="C:\build\SOTicket-1.3.6\SOTicket.Backend.deps.json" />
+				<File Id="SOTICKET.BACKEND.RUNTIMECONFIG.JSON" Name="SOTicket.Backend.runtimeconfig.json" Source="C:\build\SOTicket-1.3.6\SOTicket.Backend.runtimeconfig.json" />
+				<File Id="SOTICKET.BACKEND.STATICWEBASSETS.RUNTIME.JSON" Name="SOTicket.Backend.staticwebassets.runtime.json" Source="C:\build\SOTicket-1.3.6\SOTicket.Backend.staticwebassets.runtime.json" />
+			</Component>
+		</DirectoryRef>
 
-	<Fragment>
-		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
-			<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
-			<!-- <Component Id="ProductComponent"> -->
-				<!-- TODO: Insert files, registry keys, and other resources here. -->
-			<!-- </Component> -->
-		</ComponentGroup>
-	</Fragment>
+		<!--As Feature definem o nivel de instalação e os pacotes a qual pertencem, o Level=3 define como Typica e Level=1000 define como Completa para a instalação -->
+		<Feature Id="SOTicket" Title="SOTicket" Description="Sistema completo para gerenciamento de notas." Display="expand" TypicalDefault="install" Level="1">
+			<Feature Id="Config" Level="3" TypicalDefault="install" Title="Configurador" Description="Sistema responsável por realizar a configuração do SOTicket" ConfigurableDirectory="CONFIG">
+				<ComponentRef Id="CONFIG_COMPONENT" />
+				<ComponentRef Id="SYSTEM.MANAGEMENT.DLL" />
+				<ComponentRef Id="LEIAUTENFE_V4.00.XSD" />
+				<ComponentRef Id="NFE_V4.00.XSD" />
+				<ComponentRef Id="PROCNFE_V4.00.XSD" />
+				<ComponentRef Id="TIPOSBASICO_V4.00.XSD" />
+				<ComponentRef Id="XMLDSIG_CORE_SCHEMA_V1.01.XSD" />
+				<ComponentRef Id="SOTICKET_ERRO_AO_ENVIAR_TMPL.HTML" />
+				<ComponentRef Id="SOTICKET_REJEITADA_TMPL.HTML" />
+			</Feature>
+			<Feature Id="Service" Level="3" TypicalDefault="install" Description="Serviço responsável por efetuar a recolha e emissão de notas" Title="Serviço" ConfigurableDirectory="SERVICE">
+				<ComponentRef Id="SERVICE_COMPONENT" />
+			</Feature>
+			<Feature Id="Manager" Level="1000" Title="Gerencial" ConfigurableDirectory="MANAGER" Description="Sistema gerenciador do soticket para multi-empresa">
+				<ComponentRef Id="MANAGER_COMPONENT" />
+			</Feature>
+			<Feature Id="Backend" Level="3" ConfigurableDirectory="BACKEND" TypicalDefault="install" Description="Sistema backend SOTicket" Title="Backend">
+				<ComponentRef Id="BACKEND_COMPONENT" />
+			</Feature>
+			<Feature Id="Prog" Level="3" ConfigurableDirectory="PROG" TypicalDefault="install" Description="Programa integração com autosystem" Title="Prog">
+				<ComponentRef Id="ConfigFileProg" />
+				<ComponentRef Id="ConfigGeneratorProg" />
+			</Feature>
+		</Feature>
+
+
+		<Property Id="POWERSHELLEXE">
+			<RegistrySearch Id="POWERSHELLEXE"
+							Type="raw"
+							Root="HKLM"
+							Key="SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell"
+							Name="Path" />
+		</Property>
+
+		<!--Nesse trexo fica localizado as customAction e a sua execução.-->
+		<CustomAction Id="ActionLicenciar" BinaryKey="CustomActions" DllEntry="CustomAction1" Execute="immediate" Return="check" />
+		<CustomAction BinaryKey="CustomActions" DllEntry="GetRegister" Execute="immediate" Return="check" Id="ActionRegister" />
+		<SetProperty Id="RegisterInstallNET6"
+					  Value="&quot;[POWERSHELLEXE]&quot; $(var.scriptPowerShell)"
+					  Sequence="execute"
+					  Before="InstallFiles"/>
+		<CustomAction Id="RegisterInstallNET6" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="check" Impersonate="yes" />
+
+		<InstallExecuteSequence>
+			<Custom Action="RegisterInstallNET6" After="InstallFiles"><![CDATA[NOT Installed]]></Custom>
+		</InstallExecuteSequence>
+		<InstallUISequence>
+			<Custom Action="ActionRegister" Before="CostFinalize" />
+		</InstallUISequence>
+	</Product>
 </Wix>
