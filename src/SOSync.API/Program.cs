@@ -17,6 +17,7 @@ builder.Services.AddSOCore();
 builder.Services.AddSOFramework();
 builder.Services.AddMudServices();
 builder.Services.ConfigureDomainServices();
+builder.Services.AddSOLicense();
 
 var app = builder.Build();
 
@@ -31,7 +32,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-
+app.UseSOLicenseAsync();
 //Mud Blazor
 app.UseStaticFiles();
 app.UseAuthentication();
