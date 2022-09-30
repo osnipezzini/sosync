@@ -110,7 +110,7 @@ namespace SOSync.CustomAction
                 var response = await request.Content.ReadAsStringAsync();
                 if (request.StatusCode == HttpStatusCode.OK)
                 {
-                    var pathInstallation = Path.Combine(SOHelper.AppDataFolder, "SOTicket/licence.lic");
+                    var pathInstallation = Path.Combine(SOHelper.AppDataFolder, "SOSync/licence.lic");
                     var diretory = Path.GetDirectoryName(pathInstallation);
 
                     if (!Directory.Exists(diretory))

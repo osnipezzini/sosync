@@ -35,6 +35,19 @@
       <Name>WixUIExtension</Name>
     </WixExtension>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images" />
+    <Folder Include="Docs" />
+    <Folder Include="PythonUtils" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Docs\Documento.rtf" />
+    <Content Include="Images\Banner.bmp" />
+    <Content Include="Images\icon.ico" />
+    <Content Include="Images\Logo.bmp" />
+    <Content Include="Images\LogoSOTech.bmp" />
+    <Content Include="PythonUtils\prog8003.pyc" />
+  </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
   <Target Name="EnsureWixToolsetInstalled" Condition=" '$(WixTargetsImported)' != 'true' ">
